@@ -1,7 +1,7 @@
-package example.examplemod.init
+package org.teamvoided.createllaneous.init
 
-import example.examplemod.Createllaneous
-import example.examplemod.init.CMBlocks.EXAMPLE_BLOCK
+import org.teamvoided.createllaneous.Createllaneous
+import org.teamvoided.createllaneous.init.CMBlocks.EXAMPLE_BLOCK
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType

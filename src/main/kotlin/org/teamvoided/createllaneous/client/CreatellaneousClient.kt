@@ -1,7 +1,7 @@
-package example.examplemod.client
+package org.teamvoided.createllaneous.client
 
-import example.examplemod.Createllaneous
-import example.examplemod.Createllaneous.LOGGER
+import org.teamvoided.createllaneous.Createllaneous
+import org.teamvoided.createllaneous.Createllaneous.LOGGER
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent

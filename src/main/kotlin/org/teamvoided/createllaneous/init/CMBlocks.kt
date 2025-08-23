@@ -1,6 +1,6 @@
-package example.examplemod.init
+package org.teamvoided.createllaneous.init
 
-import example.examplemod.Createllaneous
+import org.teamvoided.createllaneous.Createllaneous
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.neoforged.neoforge.registries.DeferredBlock

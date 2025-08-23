@@ -1,7 +1,7 @@
-package example.examplemod
+package org.teamvoided.createllaneous
 
-import example.examplemod.init.CMBlocks
-import example.examplemod.init.CMItems
+import org.teamvoided.createllaneous.init.CMBlocks
+import org.teamvoided.createllaneous.init.CMItems
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent

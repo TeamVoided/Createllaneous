@@ -1,6 +1,6 @@
-package example.examplemod.init
+package org.teamvoided.createllaneous.init
 
-import example.examplemod.Createllaneous
+import org.teamvoided.createllaneous.Createllaneous
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
