@@ -2,6 +2,7 @@ package org.teamvoided.createllaneous.init
 
 import com.simibubi.create.content.decoration.TrainTrapdoorBlock
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock
+import com.simibubi.create.foundation.data.SharedProperties
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.*
@@ -10,6 +11,7 @@ import net.minecraft.world.level.material.MapColor
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.teamvoided.createllaneous.Createllaneous
+import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock
 
 object CMBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(Createllaneous.MODID)
@@ -37,9 +39,9 @@ object CMBlocks {
     }
 
     /** what is a visual? */
-    //val BREEZE_BREATHER_BLOCK = register("breeze_breather_block") {
-    //    BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
-    //}
+    val BREEZE_BREATHER_BLOCK = register("breeze_breather_block") {
+        BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
+    }
 
     init {
         //MovingInteractionBehaviour.interactionBehaviour<BreezeBreatherBlock>(BreezeBreatherBlock.BreezeBreatherConductor())
