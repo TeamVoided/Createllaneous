@@ -21,6 +21,7 @@ object CreatellaneousClient {
         setLayer(CMBlocks.BRASS_GRATE, RenderType.CUTOUT)
     }
 
+    @Suppress("DEPRECATION")
     fun <T: Block> setLayer(block: DeferredBlock<T>, type: RenderType) =
         ItemBlockRenderTypes.setRenderLayer(block.get(), type)
 }
