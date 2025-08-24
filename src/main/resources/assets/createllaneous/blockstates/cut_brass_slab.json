@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "createllaneous:block/cut_brass_slab"
+    },
+    "type=double": {
+      "model": "createllaneous:block/cut_brasss"
+    },
+    "type=top": {
+      "model": "createllaneous:block/cut_brass_slab_top"
+    }
+  }
+}

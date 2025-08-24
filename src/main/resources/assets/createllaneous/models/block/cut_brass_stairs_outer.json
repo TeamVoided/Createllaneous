@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs_outer",
+  "textures": {
+    "bottom": "createllaneous:block/cut_brass",
+    "side": "createllaneous:block/cut_brass",
+    "top": "createllaneous:block/cut_brass"
+  }
+}
