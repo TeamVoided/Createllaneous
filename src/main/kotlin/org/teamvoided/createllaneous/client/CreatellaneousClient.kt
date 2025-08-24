@@ -1,16 +1,15 @@
 package org.teamvoided.createllaneous.client
 
-import com.tterrag.registrate.util.OneTimeEventReceiver
-import com.tterrag.registrate.util.nullness.NonNullSupplier
-import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
+import net.minecraft.client.renderer.ItemBlockRenderTypes
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.world.level.block.Block
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
-import org.apache.logging.log4j.Level
+import net.neoforged.neoforge.registries.DeferredBlock
 import org.teamvoided.createllaneous.Createllaneous
-import org.teamvoided.createllaneous.Createllaneous.LOGGER
+import org.teamvoided.createllaneous.init.CMBlocks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
-import java.util.function.Predicate
 
 @Mod(value = Createllaneous.MODID, dist = [Dist.CLIENT])
 object CreatellaneousClient {
@@ -19,6 +18,9 @@ object CreatellaneousClient {
     }
 
     private fun onClientSetup(event: FMLClientSetupEvent) {
-        LOGGER.log(Level.INFO, "Initializing client...")
+        setLayer(CMBlocks.BRASS_GRATE, RenderType.CUTOUT)
     }
+
+    fun <T: Block> setLayer(block: DeferredBlock<T>, type: RenderType) =
+        ItemBlockRenderTypes.setRenderLayer(block.get(), type)
 }
