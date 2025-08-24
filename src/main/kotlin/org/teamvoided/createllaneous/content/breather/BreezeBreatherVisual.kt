@@ -71,7 +71,7 @@ class BreezeBreatherVisual(ctx: VisualizationContext?, blockEntity: BreezeBreath
         val animation = blockEntity!!.headAnimation.getValue(partialTicks) * .175f
 
         val validBlockAbove = animation > 0.125f
-        val heatLevel = blockEntity!!.heatLevelForRender
+        val heatLevel = blockEntity!!.getWindLevelForRender()
 
         if (validBlockAbove != this.validBlockAbove || heatLevel != this.windLevel) {
             this.validBlockAbove = validBlockAbove

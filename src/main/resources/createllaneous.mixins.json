@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "org.teamvoided.createllaneous.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+  ],
+  "client": [
+    "StockKeeperRequestScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

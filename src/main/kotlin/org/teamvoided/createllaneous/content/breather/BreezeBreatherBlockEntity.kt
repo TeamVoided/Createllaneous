@@ -1,19 +1,31 @@
 package org.teamvoided.createllaneous.content.breather
 
+import com.mojang.blaze3d.platform.Lighting
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
+import com.mojang.math.Axis
 import com.simibubi.create.AllBlocks
 import com.simibubi.create.AllItems
+import com.simibubi.create.AllPartialModels
 import com.simibubi.create.AllTags.AllItemTags
 import com.simibubi.create.content.fluids.tank.FluidTankBlock
 import com.simibubi.create.content.logistics.stockTicker.StockTickerBlockEntity
 import com.simibubi.create.content.processing.basin.BasinBlock
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import dev.engine_room.flywheel.api.visualization.VisualizationManager
+import net.createmod.catnip.animation.AnimationTickHolder
 import net.createmod.catnip.animation.LerpedFloat
 import net.createmod.catnip.data.Iterate
 import net.createmod.catnip.math.AngleHelper
 import net.createmod.catnip.math.VecHelper
+import net.createmod.catnip.render.CachedBuffers
+import net.createmod.catnip.render.SuperByteBuffer
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -30,12 +42,13 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
-import org.teamvoided.createllaneous.init.CMBlockEntityTypes
+import org.teamvoided.createllaneous.api.StockKeeperBlock
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock.WindLevel
+import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import kotlin.math.min
 
-class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
-    SmartBlockEntity(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), pos, state) {
+open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
+    SmartBlockEntity(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), pos, state), StockKeeperBlock {
     var headAnimation: LerpedFloat
     var stockKeeper: Boolean = false
     var isCreative: Boolean = false
@@ -155,12 +168,11 @@ class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
     val heatLevelFromBlock: WindLevel
         get() = BreezeBreatherBlock.getWindLevelOf(blockState)
 
-    val heatLevelForRender: WindLevel
-        get() {
-            val heatLevel = heatLevelFromBlock
-            if (!heatLevel.isAtLeast(WindLevel.DWINDLING) && stockKeeper) return WindLevel.DWINDLING
-            return heatLevel
-        }
+    fun getWindLevelForRender(): WindLevel {
+        val windLevel = heatLevelFromBlock
+        if (!windLevel.isAtLeast(WindLevel.DWINDLING) && stockKeeper) return WindLevel.DWINDLING
+        return windLevel
+    }
 
     fun updateBlockState() {
         setBlockWind(windLevel)
@@ -340,6 +352,48 @@ class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
                 m.z
             )
         }
+    }
+
+    override fun isValid(): Boolean = !isRemoved
+    override fun render(
+        keeperBlock: StockKeeperBlock,
+        graphics: GuiGraphics,
+        matrix: PoseStack,
+        x: Int,
+        y: Int,
+        windowHeight: Int,
+    ) {
+        val keeperBE = keeperBlock as BreezeBreatherBlockEntity
+
+        matrix.pushPose()
+        val entityX = x - 35
+        val entityY = y + windowHeight - 43
+        matrix.translate(entityX.toFloat(), entityY.toFloat(), -0f)
+        matrix.mulPose(Axis.XP.rotationDegrees(-22.5f))
+        matrix.mulPose(Axis.YP.rotationDegrees(-45f))
+        matrix.scale(48f, -48f, 48f)
+        val animation = keeperBE.headAnimation.getValue(AnimationTickHolder.getPartialTicks()) * .175f
+        val horizontalAngle = AngleHelper.rad(270.0)
+        val heatLevel = keeperBE.getWindLevelForRender()
+        val canDrawFlame = heatLevel.isAtLeast(WindLevel.DWINDLING)
+        val drawGoggles = keeperBE.goggles
+        val drawHat = AllPartialModels.LOGISTICS_HAT
+        val hashCode = keeperBE.hashCode()
+        Lighting.setupForEntityInInventory()
+
+        val cutout: VertexConsumer = graphics.bufferSource().getBuffer(RenderType.cutoutMipped())
+        CachedBuffers.partial(AllPartialModels.BLAZE_CAGE, keeperBE.blockState)
+            .rotateCentered(horizontalAngle + Mth.PI, Direction.UP)
+            .light<SuperByteBuffer>(LightTexture.FULL_BRIGHT)
+            .renderInto(matrix, cutout)
+
+        BreezeBreatherRenderer.renderShared(
+            matrix, null, graphics.bufferSource(), Minecraft.getInstance().level,
+            keeperBE.blockState, heatLevel, animation, horizontalAngle, canDrawFlame, drawGoggles, drawHat,
+            hashCode
+        )
+        Lighting.setupFor3DItems()
+        matrix.popPose()
     }
 
     enum class FuelType {
