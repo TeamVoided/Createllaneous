@@ -8,6 +8,7 @@ import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.teamvoided.createllaneous.data.gen.gatherData
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import org.teamvoided.createllaneous.init.CMTabs
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
@@ -25,6 +26,7 @@ object Createllaneous {
 
         MOD_BUS.addListener(::onCommonSetup)
         MOD_BUS.addListener(::onServerSetup)
+        MOD_BUS.addListener(::gatherData)
 
     }
 
