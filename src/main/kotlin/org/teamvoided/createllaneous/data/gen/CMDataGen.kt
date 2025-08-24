@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 import net.neoforged.neoforge.data.event.GatherDataEvent
 import org.teamvoided.createllaneous.Createllaneous.MODID
+import org.teamvoided.createllaneous.data.gen.prov.CMCraftingRecipeProvider
 import org.teamvoided.createllaneous.data.gen.prov.proc.CMCrushingRecipeGen
 import org.teamvoided.createllaneous.data.gen.prov.tag.CMBlockTagProvider
 import org.teamvoided.createllaneous.data.gen.prov.tag.CMItemTagProvider
@@ -24,7 +25,7 @@ fun gatherData(event: GatherDataEvent) {
     val blockTags: BlockTagsProvider = CMBlockTagProvider(output, lookup, fh)
     generator.addProvider(server, blockTags)
     generator.addProvider(server, CMItemTagProvider(output, lookup, blockTags.contentsGetter(), fh))
-//    generator.addProvider(server, CACraftingRecipeProvider(output, lookup))
+    generator.addProvider(server, CMCraftingRecipeProvider(output, lookup))
     generator.addProvider(server, CMCrushingRecipeGen(output, lookup))
 
     generator.addProvider(
