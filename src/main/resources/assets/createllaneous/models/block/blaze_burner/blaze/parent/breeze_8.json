@@ -1,0 +1,64 @@
+{
+  "format_version": "1.21.6",
+  "credit": "Made with Blockbench",
+  "texture_size": [32, 32],
+  "textures": {
+    "breeze": "block/texture",
+    "particle": "block/texture"
+  },
+  "elements": [
+    {
+      "name": "Breeze",
+      "from": [4, 6, 4],
+      "to": [12, 14, 12],
+      "rotation": {"angle": 0, "axis": "y", "origin": [6, 6, 6]},
+      "faces": {
+        "north": {"uv": [4, 4, 8, 8], "texture": "#breeze"},
+        "east": {"uv": [0, 4, 4, 8], "texture": "#breeze"},
+        "south": {"uv": [12, 4, 16, 8], "texture": "#breeze"},
+        "west": {"uv": [8, 4, 12, 8], "texture": "#breeze"},
+        "up": {"uv": [8, 4, 4, 0], "texture": "#breeze"},
+        "down": {"uv": [12, 0, 8, 4], "texture": "#breeze"}
+      }
+    },
+    {
+      "name": "North",
+      "from": [3, 8, 3.8],
+      "to": [13, 11, 3.8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "north": {"uv": [4, 14, 9, 15.5], "texture": "#breeze"},
+        "south": {"uv": [0, 0, 5, 1.5], "texture": "#breeze"}
+      }
+    },
+    {
+      "name": "West",
+      "from": [3, 8, 3.8],
+      "to": [3, 11, 7.8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "east": {"uv": [11, 14, 9, 15.5], "texture": "#breeze"},
+        "west": {"uv": [9, 14, 11, 15.5], "texture": "#breeze"}
+      }
+    },
+    {
+      "name": "East",
+      "from": [13, 8, 3.8],
+      "to": [13, 11, 7.8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "east": {"uv": [11, 14, 9, 15.5], "texture": "#breeze"},
+        "west": {"uv": [9, 14, 11, 15.5], "texture": "#breeze"}
+      }
+    }
+  ],
+  "groups": [
+    0,
+    {
+      "name": "Eyebrow",
+      "origin": [8, 8, 8],
+      "color": 0,
+      "children": [1, 2, 3]
+    }
+  ]
+}
