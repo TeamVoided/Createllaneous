@@ -3,9 +3,16 @@
   "package": "org.teamvoided.createllaneous.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "TrainMapManagerMixin",
+    "backport.TrainMapEventsMixin",
+    "backport.TrainMapManagerMixin"
   ],
   "client": [
-    "StockKeeperRequestScreenMixin"
+    "StockKeeperRequestScreenMixin",
+    "backport.StationScreenMixin",
+    "backport.xearo.XaeroFullscreenMapAccessor",
+    "backport.xearo.XaeroFullscreenMapMixin",
+    "backport.xearo.XaeroPauseScreenOverrideMixin"
   ],
   "injectors": {
     "defaultRequire": 1
