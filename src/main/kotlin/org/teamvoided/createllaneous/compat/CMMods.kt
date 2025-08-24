@@ -11,11 +11,13 @@ import java.util.*
 import java.util.function.Supplier
 
 object CMMods {
-    val CURIOS = OtherMod("curios");
-    val JEI = OtherMod("JEI");
+    val CURIOS = OtherMod("curios")
+    val JEI = OtherMod("JEI")
     @JvmField
-    val XAEROS_WORLD_MAP = OtherMod("xaeroworldmap");
+    val XAEROS_WORLD_MAP = OtherMod("xaeroworldmap")
+    val CREATE_ENCHANTMENT_INDUSTRY = OtherMod("create_enchantment_industry")
 
+    @Suppress("unused")
     data class OtherMod(val id: String) {
         val isLoaded: Boolean = ModList.get().isLoaded(id)
         fun rl(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(id, path)

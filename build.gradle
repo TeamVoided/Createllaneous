@@ -100,6 +100,7 @@ repositories {
     // NeoForged MDK includes mavenLocal by default
     mavenLocal()
     // REQUIRED for using Kotlin for Forge
+    maven { url "https://maven.dragons.plus/releases" } // Create: Dragons Plus
     maven {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
@@ -116,6 +117,7 @@ repositories {
         url = "https://api.modrinth.com/maven"
         content { includeGroup "maven.modrinth" }
     }
+    maven { url 'https://maven.fallenbreath.me/releases' } // Conditional Mixin
 }
 
 dependencies {
@@ -135,6 +137,10 @@ dependencies {
 
 
     implementation("maven.modrinth:xaeros-world-map:1.38.8_NeoForge_1.21")
+
+
+    implementation("plus.dragons.createdragonsplus:create-dragons-plus-${minecraft_version}:${create_dragons_plus_version}")
+    implementation("plus.dragons.createenchantmentindustry:create-enchantment-industry-${minecraft_version}:${create_enchantment_industry_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
