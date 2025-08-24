@@ -32,7 +32,26 @@ class CMBlockTagProvider(
         )
 
         tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag).add(
+            Blocks.COPPER_BLOCK,
+            Blocks.EXPOSED_COPPER,
+            Blocks.WEATHERED_COPPER,
+            Blocks.OXIDIZED_COPPER,
+
+            Blocks.CUT_COPPER,
+            Blocks.EXPOSED_CUT_COPPER,
+            Blocks.WEATHERED_CUT_COPPER,
+            Blocks.OXIDIZED_CUT_COPPER,
+
+            Blocks.CHISELED_COPPER,
+            Blocks.EXPOSED_CHISELED_COPPER,
+            Blocks.WEATHERED_CHISELED_COPPER,
+            Blocks.OXIDIZED_CHISELED_COPPER,
+
             Blocks.COPPER_GRATE,
+            Blocks.EXPOSED_COPPER_GRATE,
+            Blocks.WEATHERED_COPPER_GRATE,
+            Blocks.OXIDIZED_COPPER_GRATE,
+
             // (ender) add the rest of them at some point
 
             CMBlocks.BRASS_GRATE.get(),

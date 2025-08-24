@@ -1,7 +1,6 @@
 package org.teamvoided.createllaneous.init
 
 import com.simibubi.create.content.decoration.TrainTrapdoorBlock
-import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock
 import com.simibubi.create.foundation.data.SharedProperties
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -39,7 +38,7 @@ object CMBlocks {
     }
 
     /** what is a visual? */
-    val BREEZE_BREATHER_BLOCK = register("breeze_breather_block") {
+    val BREEZE_BREATHER = register("breeze_breather") {
         BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
     }
 

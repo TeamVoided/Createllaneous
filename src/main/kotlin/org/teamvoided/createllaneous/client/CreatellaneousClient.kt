@@ -1,19 +1,23 @@
 package org.teamvoided.createllaneous.client
 
+import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.neoforge.client.event.EntityRenderersEvent
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.teamvoided.createllaneous.Createllaneous
-import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlockEntity
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherRenderer
+import org.teamvoided.createllaneous.content.breather.BreezeBreatherVisual
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import org.teamvoided.createllaneous.init.CMBlocks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import java.util.function.Predicate
 
 @Mod(value = Createllaneous.MODID, dist = [Dist.CLIENT])
 object CreatellaneousClient {
@@ -24,10 +28,18 @@ object CreatellaneousClient {
 
     private fun onClientSetup(event: FMLClientSetupEvent) {
         setLayer(CMBlocks.BRASS_GRATE, RenderType.CUTOUT)
+        registerVisualer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
     }
 
     private fun registerRender(event: EntityRenderersEvent.RegisterRenderers){
         event.registerBlockEntityRenderer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get()) { BreezeBreatherRenderer() }
+    }
+
+    fun <T : BlockEntity> registerVisualer(type: BlockEntityType<T>, factory: SimpleBlockEntityVisualizer.Factory<T>){
+        SimpleBlockEntityVisualizer.builder<T>(type)
+            .factory(factory)
+            .skipVanillaRender { true }
+            .apply()
     }
 
     @Suppress("DEPRECATION")

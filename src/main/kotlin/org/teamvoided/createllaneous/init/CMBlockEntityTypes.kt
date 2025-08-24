@@ -7,14 +7,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlockEntity
-import org.teamvoided.createllaneous.init.CMBlocks.BREEZE_BREATHER_BLOCK
+import org.teamvoided.createllaneous.init.CMBlocks.BREEZE_BREATHER
 
 object CMBlockEntityTypes {
     val BLOCK_ENTITY_TYPES: DeferredRegister<BlockEntityType<*>> =
         DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Createllaneous.MODID)
 
     val BREEZE_BREATHER_BLOCK_ENTITY = register("breeze_breather_block_entity") {
-        BlockEntityType(::BreezeBreatherBlockEntity, setOf(BREEZE_BREATHER_BLOCK.get()), null)
+        BlockEntityType(::BreezeBreatherBlockEntity, setOf(BREEZE_BREATHER.get()), null)
     }
 
     fun <T : BlockEntity> register(
