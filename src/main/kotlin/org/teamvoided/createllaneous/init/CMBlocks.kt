@@ -2,7 +2,6 @@ package org.teamvoided.createllaneous.init
 
 import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour
-import com.simibubi.create.content.contraptions.behaviour.dispenser.DispenserMovementBehaviour
 import com.simibubi.create.content.decoration.TrainTrapdoorBlock
 import com.simibubi.create.foundation.data.SharedProperties
 import net.minecraft.world.item.BlockItem
