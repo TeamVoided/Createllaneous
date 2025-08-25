@@ -5,6 +5,7 @@ import net.minecraft.data.PackOutput
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.DoorBlock
 import net.minecraft.world.level.block.TrapDoorBlock
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider
 import org.teamvoided.createllaneous.Createllaneous.MODID
@@ -20,6 +21,8 @@ class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
         CMItems.ITEMS.entries.forEach {
             when (val item = it.get()) {
                 is BlockItem -> when (val blockItem = item.block) {
+                    is DoorBlock -> this.basicItem(item)
+                    is TrapDoorBlock -> this.simpleBlockItem(key(item.block).withSuffix("_bottom"))
                     is EmptyBreezeBreatherBlock, is BreezeBreatherBlock -> {
                         this.withExistingParent(
                             key(blockItem).toString(),
@@ -30,7 +33,7 @@ class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
                         )
                     }
 
-                    !is TrapDoorBlock -> this.simpleBlockItem(item.block)
+                    else -> this.simpleBlockItem(item.block)
                 }
 
                 else -> this.basicItem(item)

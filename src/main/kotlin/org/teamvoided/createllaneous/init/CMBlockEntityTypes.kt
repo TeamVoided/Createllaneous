@@ -1,11 +1,14 @@
 package org.teamvoided.createllaneous.init
 
-import org.teamvoided.createllaneous.Createllaneous
+import com.simibubi.create.AllBlockEntityTypes
+import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlockEntity
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
+import org.teamvoided.createllaneous.Createllaneous
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlockEntity
 import org.teamvoided.createllaneous.init.CMBlocks.BREEZE_BREATHER
 
@@ -15,6 +18,10 @@ object CMBlockEntityTypes {
 
     val BREEZE_BREATHER_BLOCK_ENTITY = register("breeze_breather_block_entity") {
         BlockEntityType(::BreezeBreatherBlockEntity, setOf(BREEZE_BREATHER.get()), null)
+    }
+
+    fun addBlockEntities(event: BlockEntityTypeAddBlocksEvent) {
+        event.modify(AllBlockEntityTypes.SLIDING_DOOR.get(), *CMBlocks.DOOR_BLOCKS.map { it.get() }.toTypedArray())
     }
 
     fun <T : BlockEntity> register(

@@ -1,5 +1,7 @@
 package org.teamvoided.createllaneous.client
 
+import com.simibubi.create.AllBlockEntityTypes
+import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorRenderer
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.RenderType
@@ -33,6 +35,8 @@ object CreatellaneousClient {
         ).forEach { setLayer(it, RenderType.CUTOUT) }
 
         registerVisualizer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
+
+
         CMPartialModels.init()
     }
 

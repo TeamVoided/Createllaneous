@@ -5,6 +5,8 @@ import net.minecraft.data.loot.BlockLootSubProvider
 import net.minecraft.data.loot.LootTableProvider.SubProviderEntry
 import net.minecraft.world.flag.FeatureFlags
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.DoorBlock
+import net.minecraft.world.level.block.SlabBlock
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import org.teamvoided.createllaneous.init.CMBlocks
 
@@ -13,9 +15,21 @@ class BlockLootProvider(l: HolderLookup.Provider) : BlockLootSubProvider(setOf()
 
     override fun generate() {
         for (block in CMBlocks.BLOCKS.entries) {
-            dropSelf(block.get())
+            when (block.get()) {
+                is DoorBlock -> door(block.get())
+                is SlabBlock -> slab(block.get())
+                else -> dropSelf(block.get())
+            }
         }
 //        add(CMBlocks.BRASS_TRAPDOOR.get(), createSilkTouchOnlyTable(CMBlocks.ANDESITE_TRAPDOOR.get()))
+    }
+
+    fun slab(block: Block) {
+        this.add(block, this.createSlabItemTable(block))
+    }
+
+    fun door(block: Block) {
+        this.add(block, this.createDoorTable(block))
     }
 
     companion object {

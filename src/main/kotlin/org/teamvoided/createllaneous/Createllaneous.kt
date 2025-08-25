@@ -30,7 +30,7 @@ object Createllaneous {
         MOD_BUS.addListener(::onCommonSetup)
         MOD_BUS.addListener(::onServerSetup)
         MOD_BUS.addListener(::gatherData)
-
+        MOD_BUS.addListener(CMBlockEntityTypes::addBlockEntities)
     }
 
     private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
