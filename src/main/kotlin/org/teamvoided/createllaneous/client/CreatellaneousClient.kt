@@ -17,7 +17,6 @@ import org.teamvoided.createllaneous.content.breather.BreezeBreatherVisual
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import org.teamvoided.createllaneous.init.CMBlocks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
-import java.util.function.Predicate
 
 @Mod(value = Createllaneous.MODID, dist = [Dist.CLIENT])
 object CreatellaneousClient {
@@ -27,24 +26,30 @@ object CreatellaneousClient {
     }
 
     private fun onClientSetup(event: FMLClientSetupEvent) {
-        setLayer(CMBlocks.BRASS_GRATE, RenderType.CUTOUT)
-        setLayer(CMBlocks.BREEZE_BREATHER, RenderType.CUTOUT)
-        registerVisualer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
+        listOf(
+            CMBlocks.BRASS_GRATE,
+            CMBlocks.EMPTY_BREEZE_BREATHER,
+            CMBlocks.BREEZE_BREATHER,
+        ).forEach { setLayer(it, RenderType.CUTOUT) }
+
+        registerVisualizer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
         CMPartialModels.init()
     }
 
-    private fun registerRender(event: EntityRenderersEvent.RegisterRenderers){
+    private fun registerRender(event: EntityRenderersEvent.RegisterRenderers) {
         event.registerBlockEntityRenderer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get()) { BreezeBreatherRenderer() }
     }
 
-    fun <T : BlockEntity> registerVisualer(type: BlockEntityType<T>, factory: SimpleBlockEntityVisualizer.Factory<T>){
-        SimpleBlockEntityVisualizer.builder<T>(type)
+    fun <T : BlockEntity> registerVisualizer(
+        type: BlockEntityType<T>, factory: SimpleBlockEntityVisualizer.Factory<T>,
+    ): SimpleBlockEntityVisualizer<T> {
+        return SimpleBlockEntityVisualizer.builder<T>(type)
             .factory(factory)
             .skipVanillaRender { true }
             .apply()
     }
 
     @Suppress("DEPRECATION")
-    fun <T: Block> setLayer(block: DeferredBlock<T>, type: RenderType) =
+    fun <T : Block> setLayer(block: DeferredBlock<T>, type: RenderType) =
         ItemBlockRenderTypes.setRenderLayer(block.get(), type)
 }
