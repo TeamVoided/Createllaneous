@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.block.Block
 import net.neoforged.fml.ModList
+import org.teamvoided.createllaneous.Createllaneous.id
 import java.util.*
 import java.util.function.Supplier
 
@@ -20,7 +21,7 @@ object CMMods {
     @Suppress("unused")
     data class OtherMod(val id: String) {
         val isLoaded: Boolean = ModList.get().isLoaded(id)
-        fun rl(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(id, path)
+        fun rl(path: String): ResourceLocation = id(id, path)
         fun getBlock(id: String): Block = BuiltInRegistries.BLOCK.get(rl(id))
         fun getItem(id: String): Item = BuiltInRegistries.ITEM.get(rl(id))
         fun contains(entry: ItemLike): Boolean {
