@@ -23,18 +23,19 @@ class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
             when (val item = it.get()) {
                 is BlockItem -> when (val blockItem = item.block) {
                     is DoorBlock -> this.basicItem(item)
-                    is TrapDoorBlock -> this.simpleBlockItem(blockKey(item.block).withSuffix("_bottom"))
+                    is TrapDoorBlock -> this.withExistingParent(
+                        blockKey(blockItem).toString(),
+                        blockKey(blockItem).withSuffix("_bottom")
+                    )
+
                     is EmptyBreezeBreatherBlock, is BreezeBreatherBlock -> {
                         this.withExistingParent(
                             blockKey(blockItem).toString(),
-                            ResourceLocation.fromNamespaceAndPath(
-                                MODID,
-                                "block/" + blockKey(CMBlocks.BREEZE_BREATHER.get()).path + "/block"
-                            )
+                            blockKey(CMBlocks.BREEZE_BREATHER.get()).withPrefix("/block")
                         )
                     }
 
-                    else -> this.simpleBlockItem(item.block)
+                    else -> this.simpleBlockItem(blockItem)
                 }
 
                 else -> this.basicItem(item)
