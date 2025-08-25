@@ -5,7 +5,7 @@ import net.minecraft.data.PackOutput
 import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.data.gen.Lookup
 
-class CMCrushingRecipeGen(o: PackOutput, p: Lookup) : CrushingRecipeGen(o, p, MODID) {
+class CMCrushingRecipeGen(o: PackOutput, l: Lookup) : CrushingRecipeGen(o, l, MODID) {
    /* var DIAMOND = create(
         MODID, { Items.DIAMOND_CHESTPLATE }, { builder ->
             builder.duration(300)

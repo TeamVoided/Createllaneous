@@ -3,16 +3,17 @@ package org.teamvoided.createllaneous.data.gen.prov.tag
 
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput
-import net.minecraft.data.tags.ItemTagsProvider
-import net.minecraft.world.level.block.Block
+import net.minecraft.data.tags.EntityTypeTagsProvider
+import net.minecraft.world.entity.EntityType
 import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.data.gen.FH
 import org.teamvoided.createllaneous.data.gen.Lookup
-import java.util.concurrent.CompletableFuture
+import org.teamvoided.createllaneous.data.tags.CMEntityTags
 
-class CMItemTagProvider(o: PackOutput, l: Lookup, bt: CompletableFuture<TagLookup<Block>>) :
-    ItemTagsProvider(o, l, bt, MODID, FH) {
+class CMEntityTagProvider(o: PackOutput, l: Lookup) : EntityTypeTagsProvider(o, l, MODID, FH) {
     override fun addTags(provider: HolderLookup.Provider) {
-//        tag(AllTags.AllItemTags.UPRIGHT_ON_BELT.tag).add()
+        tag(CMEntityTags.BREEZE_BURNER_CAPTURABLE).add(
+            EntityType.BREEZE
+        )
     }
 }

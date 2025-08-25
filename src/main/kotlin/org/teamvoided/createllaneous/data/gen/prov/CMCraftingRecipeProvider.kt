@@ -15,7 +15,7 @@ import org.teamvoided.createllaneous.Createllaneous.id
 import org.teamvoided.createllaneous.data.gen.Lookup
 import org.teamvoided.createllaneous.init.CMBlocks
 
-class CMCraftingRecipeProvider(output: PackOutput, registries: Lookup) : RecipeProvider(output, registries) {
+class CMCraftingRecipeProvider(o: PackOutput, l: Lookup) : RecipeProvider(o, l) {
     override fun buildRecipes(recipeOutput: RecipeOutput) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CMBlocks.CUT_BRASS.asItem(), 4)
             .pattern("##")

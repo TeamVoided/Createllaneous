@@ -7,14 +7,12 @@ import net.minecraft.data.PackOutput
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.Blocks
 import net.neoforged.neoforge.common.data.BlockTagsProvider
-import net.neoforged.neoforge.common.data.ExistingFileHelper
 import org.teamvoided.createllaneous.Createllaneous.MODID
+import org.teamvoided.createllaneous.data.gen.FH
+import org.teamvoided.createllaneous.data.gen.Lookup
 import org.teamvoided.createllaneous.init.CMBlocks
-import java.util.concurrent.CompletableFuture
 
-class CMBlockTagProvider(
-    output: PackOutput, lookup: CompletableFuture<HolderLookup.Provider>, fh: ExistingFileHelper,
-) : BlockTagsProvider(output, lookup, MODID, fh) {
+class CMBlockTagProvider(o: PackOutput, l: Lookup) : BlockTagsProvider(o, l, MODID, FH) {
     override fun addTags(provider: HolderLookup.Provider) {
         tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag).add(
             CMBlocks.BRASS_GRATE.get()

@@ -7,15 +7,15 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.TrapDoorBlock
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider
-import net.neoforged.neoforge.common.data.ExistingFileHelper
 import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock
 import org.teamvoided.createllaneous.content.breather.EmptyBreezeBreatherBlock
+import org.teamvoided.createllaneous.data.gen.FH
 import org.teamvoided.createllaneous.init.CMBlocks
 import org.teamvoided.createllaneous.init.CMItems
 import java.util.*
 
-class ItemModelProvider(o: PackOutput, fh: ExistingFileHelper) : ItemModelProvider(o, MODID, fh) {
+class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
     override fun registerModels() {
         CMItems.ITEMS.entries.forEach {
             when (val item = it.get()) {

@@ -8,7 +8,7 @@ import org.teamvoided.createllaneous.init.CMBlocks
 import org.teamvoided.createllaneous.init.CMItems
 import org.teamvoided.createllaneous.utils.Lang
 
-class ENLangProvider(output: PackOutput) : LanguageProvider(output, MODID, "en_us") {
+class ENLangProvider(o: PackOutput) : LanguageProvider(o, MODID, "en_us") {
     override fun addTranslations() {
         CMBlocks.BLOCKS.entries.forEach { ty { addBlock(it, genLang(it.id)) } }
         CMItems.ITEMS.entries.forEach { ty { addItem(it, genLang(it.id)) } }
