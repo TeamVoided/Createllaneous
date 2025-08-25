@@ -13,6 +13,7 @@ import org.teamvoided.createllaneous.init.CMBlocks
 import org.teamvoided.createllaneous.init.CMItemAttributeType
 import org.teamvoided.createllaneous.init.CMItems
 import org.teamvoided.createllaneous.init.CMTabs
+import org.teamvoided.createllaneous.utils.registerCapabilities
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(Createllaneous.MODID)
@@ -31,6 +32,7 @@ object Createllaneous {
         MOD_BUS.addListener(::onServerSetup)
         MOD_BUS.addListener(::gatherData)
         MOD_BUS.addListener(CMBlockEntityTypes::addBlockEntities)
+        MOD_BUS.addListener(::registerCapabilities)
     }
 
     private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
