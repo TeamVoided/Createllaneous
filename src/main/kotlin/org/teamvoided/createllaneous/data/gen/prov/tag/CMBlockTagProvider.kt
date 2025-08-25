@@ -25,15 +25,18 @@ class CMBlockTagProvider(
             CMBlocks.CUT_BRASS_SLAB.get(),
             CMBlocks.BRASS_GRATE.get(),
             CMBlocks.BRASS_TRAPDOOR.get(),
+            CMBlocks.ANDESITE_TRAPDOOR.get(),
         )
 
         tag(BlockTags.MINEABLE_WITH_AXE).add(
             CMBlocks.BRASS_TRAPDOOR.get(),
+            CMBlocks.ANDESITE_TRAPDOOR.get(),
         )
 
         tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag).add(
             CMBlocks.BRASS_GRATE.get(),
             CMBlocks.BRASS_TRAPDOOR.get(),
+            CMBlocks.ANDESITE_TRAPDOOR.get(),
 
             Blocks.LIGHTNING_ROD,
 

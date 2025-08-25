@@ -39,6 +39,12 @@ object CMBlocks {
         TrainTrapdoorBlock(BlockBehaviour.Properties.ofFullCopy(CUT_BRASS.get()).sound(SoundType.NETHERITE_BLOCK))
         //TrapDoorBlock(SlidingDoorBlock.TRAIN_SET_TYPE.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))
     }
+    val ANDESITE_TRAPDOOR = register("andesite_trapdoor") {
+        TrainTrapdoorBlock(
+            BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .requiresCorrectToolForDrops()
+        )
+    }
 
     val EMPTY_BREEZE_BREATHER = register("empty_breeze_breather") {
         EmptyBreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))

@@ -38,6 +38,11 @@ class CMCraftingRecipeProvider(output: PackOutput, registries: Lookup) : RecipeP
             .requires(AllBlocks.BRASS_CASING.asItem())
             .unlockedBy("has_brass_casing", has(AllBlocks.BRASS_CASING.asItem()))
             .save(recipeOutput)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, CMBlocks.ANDESITE_TRAPDOOR.asItem())
+            .requires(ItemTags.WOODEN_TRAPDOORS)
+            .requires(AllBlocks.ANDESITE_CASING.asItem())
+            .unlockedBy("has_andesite_casing", has(AllBlocks.ANDESITE_CASING.asItem()))
+            .save(recipeOutput)
 
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CMBlocks.EMPTY_BREEZE_BREATHER.asItem(), 1)
