@@ -12,8 +12,10 @@ class BlockLootProvider(l: HolderLookup.Provider) : BlockLootSubProvider(setOf()
     override fun getKnownBlocks(): Iterable<Block> = CMBlocks.BLOCKS.entries.map { it.value() }.toList()
 
     override fun generate() {
-        dropSelf(CMBlocks.CUT_BRASS.get())
-        add(CMBlocks.BRASS_TRAPDOOR.get(), createSilkTouchOnlyTable(CMBlocks.ANDESITE_TRAPDOOR.get()))
+        for (block in CMBlocks.BLOCKS.entries) {
+            dropSelf(block.get())
+        }
+//        add(CMBlocks.BRASS_TRAPDOOR.get(), createSilkTouchOnlyTable(CMBlocks.ANDESITE_TRAPDOOR.get()))
     }
 
     companion object {
