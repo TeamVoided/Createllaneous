@@ -3,6 +3,7 @@
   "package": "org.teamvoided.createllaneous.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BaseSpawnerAccessor",
     "TrainMapManagerMixin",
     "backport.TrainMapEventsMixin",
     "backport.TrainMapManagerMixin"

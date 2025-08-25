@@ -24,8 +24,6 @@ class BreezeBreatherMovementBehavior : MovementBehaviour {
     override fun canBeDisabledVia(context: MovementContext): ItemStack? = null
 
     override fun tick(context: MovementContext) {
-        println("brez")
-
         if (!context.world.isClientSide()) return
 
         val r = context.world.getRandom()

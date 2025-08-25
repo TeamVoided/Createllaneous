@@ -2,6 +2,7 @@ package org.teamvoided.createllaneous.init
 
 import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour
+import com.simibubi.create.content.contraptions.behaviour.dispenser.DispenserMovementBehaviour
 import com.simibubi.create.content.decoration.TrainTrapdoorBlock
 import com.simibubi.create.foundation.data.SharedProperties
 import net.minecraft.world.item.BlockItem
@@ -46,7 +47,7 @@ object CMBlocks {
         )
     }
 
-    val EMPTY_BREEZE_BREATHER = register("empty_breeze_breather") {
+    val EMPTY_BREEZE_BREATHER = registerNoItem("empty_breeze_breather") {
         EmptyBreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
     }
     val BREEZE_BREATHER = register("breeze_breather") {
@@ -54,8 +55,8 @@ object CMBlocks {
     }
 
     fun init() {
-        MovementBehaviour.movementBehaviour<BreezeBreatherBlock>(BreezeBreatherMovementBehavior())
-        MovingInteractionBehaviour.interactionBehaviour<BreezeBreatherBlock>(BreezeBreatherBlock.BreezeBreatherConductor())
+        MovementBehaviour.REGISTRY.register(BREEZE_BREATHER.get(), BreezeBreatherMovementBehavior())
+        MovingInteractionBehaviour.REGISTRY.register(BREEZE_BREATHER.get(), BreezeBreatherBlock.BreezeBreatherConductor())
     }
 
     fun <T : Block> register(name: String, blockSupplier: () -> T): DeferredBlock<T> {
