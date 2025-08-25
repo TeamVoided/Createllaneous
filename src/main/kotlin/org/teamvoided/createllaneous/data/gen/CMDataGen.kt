@@ -2,6 +2,7 @@ package org.teamvoided.createllaneous.data.gen
 
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.RegistrySetBuilder
+import net.minecraft.data.loot.LootTableProvider
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider
 import net.neoforged.neoforge.common.data.ExistingFileHelper
 import net.neoforged.neoforge.data.event.GatherDataEvent
@@ -10,6 +11,7 @@ import org.teamvoided.createllaneous.data.gen.prov.CMCraftingRecipeProvider
 import org.teamvoided.createllaneous.data.gen.prov.client.BlockModelProvider
 import org.teamvoided.createllaneous.data.gen.prov.client.ENLangProvider
 import org.teamvoided.createllaneous.data.gen.prov.client.ItemModelProvider
+import org.teamvoided.createllaneous.data.gen.prov.loot.BlockLootProvider.Companion.blockLoot
 import org.teamvoided.createllaneous.data.gen.prov.proc.CMCrushingRecipeGen
 import org.teamvoided.createllaneous.data.gen.prov.tag.CMBlockTagProvider
 import org.teamvoided.createllaneous.data.gen.prov.tag.CMEntityTagProvider
@@ -21,34 +23,32 @@ typealias Lookup = CompletableFuture<HolderLookup.Provider>
 var FH: ExistingFileHelper? = null
 
 fun gatherData(event: GatherDataEvent) {
-    val generator = event.generator
-    val output = generator.packOutput
-    val lookup = event.lookupProvider
     FH = turnOffFileHelper(event.existingFileHelper)
-    val server = event.includeServer()
+    // Assets
+    event.createProvider(::ENLangProvider)
+    event.createProvider(::ItemModelProvider)
+    event.createProvider(::BlockModelProvider)
 
     //Data
-    generator.addProvider(server, CMCraftingRecipeProvider(output, lookup))
-    generator.addProvider(server, CMCrushingRecipeGen(output, lookup))
+    event.createProvider(::CMCraftingRecipeProvider)
+    event.createProvider(::CMCrushingRecipeGen)
     // Tags
-    val blockTags = generator.addProvider(server, CMBlockTagProvider(output, lookup))
-    generator.addProvider(server, CMItemTagProvider(output, lookup, blockTags.contentsGetter()))
-    generator.addProvider(server, CMEntityTagProvider(output, lookup))
+    val blockTags = event.createProvider(::CMBlockTagProvider)
+    event.createProvider { o, l -> CMItemTagProvider(o, l, blockTags.contentsGetter()) }
+    event.createProvider(::CMEntityTagProvider)
 
-    // Assets
-    generator.addProvider(server, ENLangProvider(output))
-    generator.addProvider(server, ItemModelProvider(output))
-    generator.addProvider(server, BlockModelProvider(output))
+    event.createProvider { o, l -> LootTableProvider(o, setOf(), listOf(blockLoot()), l) }
 
-    generator.addProvider(
-        server, DatapackBuiltinEntriesProvider(
-            output, lookup, RegistrySetBuilder()
+    // Dynamic
+    event.createProvider { o, l ->
+        DatapackBuiltinEntriesProvider(
+            o, l, RegistrySetBuilder()
 //                .add(Registries.DAMAGE_TYPE, CADamageTypesDatagen::bootstrap)
 //                .add(CreateRegistries.POTATO_PROJECTILE_TYPE, CAPotatoProjectileTypesDatagen::bootstrap)
             ,
             setOf(MODID)
         )
-    )
+    }
 }
 
 fun turnOffFileHelper(fh: ExistingFileHelper): ExistingFileHelper {
