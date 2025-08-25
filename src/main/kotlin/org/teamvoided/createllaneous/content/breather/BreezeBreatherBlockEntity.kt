@@ -232,7 +232,8 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
         y: Int,
         windowHeight: Int,
     ) {
-        val keeperBE = keeperBlock as BreezeBreatherBlockEntity
+        val keeperBE = keeperBlock
+        if (keeperBE !is BreezeBreatherBlockEntity) return
 
         matrix.pushPose()
         val entityX = x - 35

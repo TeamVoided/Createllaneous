@@ -1,4 +1,4 @@
-package org.teamvoided.createllaneous.mixin;
+package org.teamvoided.createllaneous.mixin.skb;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -30,11 +30,9 @@ public abstract class StockKeeperRequestScreenMixin extends AbstractContainerScr
         super(menu, playerInventory, title);
     }
 
-    @Shadow
-    StockTickerBlockEntity blockEntity;
-    @Shadow
-    private int windowHeight;
-    @Shadow private WeakReference<BlazeBurnerBlockEntity> blaze;
+    @Shadow StockTickerBlockEntity blockEntity;
+    @Shadow int windowHeight;
+    @Shadow WeakReference<BlazeBurnerBlockEntity> blaze;
     @Unique
     WeakReference<StockKeeperBlock> createllaneous$stockKeeperBlock = new WeakReference<>(null);
 

@@ -6,14 +6,15 @@
     "BaseSpawnerAccessor",
     "TrainMapManagerMixin",
     "backport.TrainMapEventsMixin",
-    "backport.TrainMapManagerMixin"
+    "backport.TrainMapManagerMixin",
+    "skb.StockTickerBlockEntityMixin"
   ],
   "client": [
-    "StockKeeperRequestScreenMixin",
     "backport.StationScreenMixin",
     "backport.xearo.XaeroFullscreenMapAccessor",
     "backport.xearo.XaeroFullscreenMapMixin",
-    "backport.xearo.XaeroPauseScreenOverrideMixin"
+    "backport.xearo.XaeroPauseScreenOverrideMixin",
+    "skb.StockKeeperRequestScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
