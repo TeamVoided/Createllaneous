@@ -1,11 +1,5 @@
 {
-  "credit": "Made with Blockbench",
   "parent": "block/block",
-  "textures": {
-    "side": "create:block/brass_door_side",
-    "top": "create:block/brass_door_top",
-    "particle": "create:block/brass_casing"
-  },
   "elements": [
     {
       "from": [0, 0, 0],

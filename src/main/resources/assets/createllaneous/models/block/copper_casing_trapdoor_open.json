@@ -1,6 +1,6 @@
 {
   "textures": {
-    "0": "create:block/copper_casing_door_side",
+    "0": "createllaneous:block/copper_casing_door_side",
     "1": "createllaneous:block/copper_casing_trapdoor",
     "particle": "createllaneous:block/copper_casing_trapdoor"
   },

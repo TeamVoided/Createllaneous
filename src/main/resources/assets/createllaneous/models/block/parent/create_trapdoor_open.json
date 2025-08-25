@@ -1,9 +1,4 @@
 {
-  "textures": {
-    "side": "create:block/copper_casing_door_side",
-    "top": "createllaneous:block/copper_casing_trapdoor",
-    "particle": "createllaneous:block/copper_casing_trapdoor"
-  },
   "elements": [
     {
       "from": [0, 0, 13],

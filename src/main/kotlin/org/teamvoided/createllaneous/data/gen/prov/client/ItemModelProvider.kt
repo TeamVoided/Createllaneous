@@ -14,6 +14,7 @@ import org.teamvoided.createllaneous.content.breather.EmptyBreezeBreatherBlock
 import org.teamvoided.createllaneous.data.gen.FH
 import org.teamvoided.createllaneous.init.CMBlocks
 import org.teamvoided.createllaneous.init.CMItems
+import org.teamvoided.createllaneous.utils.blockKey
 import java.util.*
 
 class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
@@ -22,13 +23,13 @@ class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
             when (val item = it.get()) {
                 is BlockItem -> when (val blockItem = item.block) {
                     is DoorBlock -> this.basicItem(item)
-                    is TrapDoorBlock -> this.simpleBlockItem(key(item.block).withSuffix("_bottom"))
+                    is TrapDoorBlock -> this.simpleBlockItem(blockKey(item.block).withSuffix("_bottom"))
                     is EmptyBreezeBreatherBlock, is BreezeBreatherBlock -> {
                         this.withExistingParent(
-                            key(blockItem).toString(),
+                            blockKey(blockItem).toString(),
                             ResourceLocation.fromNamespaceAndPath(
                                 MODID,
-                                "block/" + key(CMBlocks.BREEZE_BREATHER.get()).path + "/block"
+                                "block/" + blockKey(CMBlocks.BREEZE_BREATHER.get()).path + "/block"
                             )
                         )
                     }
@@ -41,6 +42,4 @@ class ItemModelProvider(o: PackOutput) : ItemModelProvider(o, MODID, FH) {
         }
     }
 
-    private fun key(block: Block): ResourceLocation =
-        Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block))
 }

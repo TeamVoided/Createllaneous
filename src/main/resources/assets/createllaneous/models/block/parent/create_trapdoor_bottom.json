@@ -1,10 +1,5 @@
 {
   "parent": "block/thin_block",
-  "textures": {
-    "side": "create:block/copper_casing_door_side",
-    "1": "createllaneous:block/copper_casing_trapdoor",
-    "particle": "createllaneous:block/copper_casing_trapdoor"
-  },
   "elements": [
     {
       "from": [0, 0, 0],
