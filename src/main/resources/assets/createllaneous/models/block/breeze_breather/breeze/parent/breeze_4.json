@@ -1,0 +1,62 @@
+{
+  "parent": "block/block",
+  "format_version": "1.21.6",
+  "credit": "Made with Blockbench",
+  "texture_size": [32, 32],
+  "render_type": "minecraft:cutout",
+  "elements": [
+    {
+      "name": "Breeze",
+      "from": [6, 6, 6],
+      "to": [10, 10, 10],
+      "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "north": {"uv": [2, 8, 4, 10], "texture": "#breeze"},
+        "east": {"uv": [0, 8, 2, 10], "texture": "#breeze"},
+        "south": {"uv": [6, 8, 8, 10], "texture": "#breeze"},
+        "west": {"uv": [4, 8, 6, 10], "texture": "#breeze"},
+        "up": {"uv": [2, 6, 4, 8], "texture": "#breeze", "rotation": 180},
+        "down": {"uv": [4, 6, 6, 8], "texture": "#breeze"}
+      }
+    },
+    {
+      "name": "North",
+      "from": [5, 8, 5.8],
+      "to": [11, 11, 5.8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [8, 7, 8]},
+      "faces": {
+        "north": {"uv": [5, 14, 8, 15.5], "texture": "#breeze"},
+        "south": {"uv": [5, 14, 8, 15.5], "texture": "#breeze"}
+      }
+    },
+    {
+      "name": "West",
+      "from": [5, 8, 5.8],
+      "to": [5, 11, 11.8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [9, 8, 9]},
+      "faces": {
+        "east": {"uv": [11, 14, 8, 15.5], "texture": "#breeze"},
+        "west": {"uv": [8, 14, 11, 15.5], "texture": "#breeze"}
+      }
+    },
+    {
+      "name": "East",
+      "from": [11, 8, 5.8],
+      "to": [11, 11, 11.8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [7, 8, 9]},
+      "faces": {
+        "east": {"uv": [2, 14, 5, 15.5], "texture": "#breeze"},
+        "west": {"uv": [5, 14, 2, 15.5], "texture": "#breeze"}
+      }
+    }
+  ],
+  "groups": [
+    0,
+    {
+      "name": "Eyebrow",
+      "origin": [8, 8, 8],
+      "color": 0,
+      "children": [1, 2, 3]
+    }
+  ]
+}

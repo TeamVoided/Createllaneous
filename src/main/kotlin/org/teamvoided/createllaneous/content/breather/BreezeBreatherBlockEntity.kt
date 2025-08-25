@@ -5,13 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
 import com.simibubi.create.AllBlocks
-import com.simibubi.create.AllItems
 import com.simibubi.create.AllPartialModels
-import com.simibubi.create.AllTags.AllItemTags
 import com.simibubi.create.content.fluids.tank.FluidTankBlock
 import com.simibubi.create.content.logistics.stockTicker.StockTickerBlockEntity
 import com.simibubi.create.content.processing.basin.BasinBlock
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import dev.engine_room.flywheel.api.visualization.VisualizationManager
@@ -34,7 +31,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
@@ -43,25 +39,21 @@ import net.minecraft.world.phys.Vec3
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
 import org.teamvoided.createllaneous.api.StockKeeperBlock
+import org.teamvoided.createllaneous.client.CMPartialModels
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock.WindLevel
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
-import kotlin.math.min
 
 open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
     SmartBlockEntity(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), pos, state), StockKeeperBlock {
     var headAnimation: LerpedFloat
     var stockKeeper: Boolean = false
-    var isCreative: Boolean = false
     var goggles: Boolean = false
     var hat: Boolean = false
 
-    var activeFuel: FuelType
-    var remainingBurnTime: Int = 0
     var headAngle: LerpedFloat
 
 
     init {
-        activeFuel = FuelType.NONE
         headAnimation = LerpedFloat.linear()
         headAngle = LerpedFloat.angular()
 
@@ -77,23 +69,9 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
 
         if (level!!.isClientSide) {
             if (shouldTickAnimation()) tickAnimation()
-            if (!isVirtual) spawnParticles(heatLevelFromBlock, 1.0)
+            if (!isVirtual) spawnParticles(windLevelFromBlock, 1.0)
             return
         }
-
-        if (isCreative) return
-
-        if (remainingBurnTime > 0) remainingBurnTime--
-
-        if (activeFuel == FuelType.NORMAL) updateBlockState()
-        if (remainingBurnTime > 0) return
-
-        if (activeFuel == FuelType.SPECIAL) {
-            activeFuel = FuelType.NORMAL
-            remainingBurnTime = MAX_HEAT_CAPACITY / 2
-        } else activeFuel = FuelType.NONE
-
-        updateBlockState()
     }
 
     override fun lazyTick() {
@@ -109,7 +87,7 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
 
     @OnlyIn(Dist.CLIENT)
     fun tickAnimation() {
-        val active = heatLevelFromBlock.isAtLeast(WindLevel.DWINDLING) && isValidBlockAbove
+        val active = windLevelFromBlock.isAtLeast(WindLevel.DWINDLING) && isValidBlockAbove
 
         if (!active) {
             var target = 0f
@@ -147,126 +125,31 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
     override fun addBehaviours(behaviours: List<BlockEntityBehaviour>) {}
 
     public override fun write(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
-        if (!isCreative) {
-            compound.putInt("fuelLevel", activeFuel.ordinal)
-            compound.putInt("burnTimeRemaining", remainingBurnTime)
-        } else compound.putBoolean("isCreative", true)
         if (goggles) compound.putBoolean("Goggles", true)
         if (hat) compound.putBoolean("TrainHat", true)
         super.write(compound, registries, clientPacket)
     }
 
     override fun read(compound: CompoundTag, registries: HolderLookup.Provider, clientPacket: Boolean) {
-        activeFuel = FuelType.entries[compound.getInt("fuelLevel")]
-        remainingBurnTime = compound.getInt("burnTimeRemaining")
-        isCreative = compound.getBoolean("isCreative")
         goggles = compound.contains("Goggles")
         hat = compound.contains("TrainHat")
         super.read(compound, registries, clientPacket)
     }
 
-    val heatLevelFromBlock: WindLevel
+    val windLevelFromBlock: WindLevel
         get() = BreezeBreatherBlock.getWindLevelOf(blockState)
 
     fun getWindLevelForRender(): WindLevel {
-        val windLevel = heatLevelFromBlock
+        val windLevel = windLevelFromBlock
         if (!windLevel.isAtLeast(WindLevel.DWINDLING) && stockKeeper) return WindLevel.DWINDLING
         return windLevel
     }
 
-    fun updateBlockState() {
-        setBlockWind(windLevel)
-    }
-
     protected fun setBlockWind(wind: WindLevel) {
-        val inBlockState = heatLevelFromBlock
+        val inBlockState = windLevelFromBlock
         if (inBlockState == wind) return
         level!!.setBlockAndUpdate(worldPosition, blockState.setValue(BreezeBreatherBlock.WIND_LEVEL, wind))
         notifyUpdate()
-    }
-
-    /**
-     * @return true if the heater updated its burn time and an item should be
-     * consumed
-     */
-    fun tryUpdateFuel(itemStack: ItemStack, forceOverflow: Boolean, simulate: Boolean): Boolean {
-        if (isCreative) return false
-
-        var newFuel = FuelType.NONE
-        var newBurnTime: Int
-
-        if (AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.matches(itemStack)) {
-            newBurnTime = 3200
-            newFuel = FuelType.SPECIAL
-        } else {
-            newBurnTime = itemStack.getBurnTime(null)
-            if (newBurnTime > 0) {
-                newFuel = FuelType.NORMAL
-            } else if (AllItemTags.BLAZE_BURNER_FUEL_REGULAR.matches(itemStack)) {
-                newBurnTime = 1600 // Same as coal
-                newFuel = FuelType.NORMAL
-            }
-        }
-
-        if (newFuel == FuelType.NONE) return false
-        if (newFuel.ordinal < activeFuel.ordinal) return false
-
-        if (newFuel == activeFuel) {
-            if (remainingBurnTime <= INSERTION_THRESHOLD) {
-                newBurnTime += remainingBurnTime
-            } else if (forceOverflow && newFuel == FuelType.NORMAL) {
-                newBurnTime = if (remainingBurnTime < MAX_HEAT_CAPACITY) {
-                    min((remainingBurnTime + newBurnTime).toDouble(), MAX_HEAT_CAPACITY.toDouble())
-                        .toInt()
-                } else {
-                    remainingBurnTime
-                }
-            } else {
-                return false
-            }
-        }
-
-        if (simulate) return true
-
-        activeFuel = newFuel
-        remainingBurnTime = newBurnTime
-
-        if (level!!.isClientSide) {
-            spawnParticleBurst(activeFuel == FuelType.SPECIAL)
-            return true
-        }
-
-        val prev = heatLevelFromBlock
-        playSound()
-        updateBlockState()
-
-        if (prev != heatLevelFromBlock) level!!.playSound(
-            null, worldPosition, SoundEvents.BLAZE_AMBIENT, SoundSource.BLOCKS,
-            .125f + level!!.random.nextFloat() * .125f, 1.15f - level!!.random.nextFloat() * .25f
-        )
-
-        return true
-    }
-
-    fun applyCreativeFuel() {
-        activeFuel = FuelType.NONE
-        remainingBurnTime = 0
-        isCreative = true
-
-        var next = heatLevelFromBlock.nextActiveLevel()
-
-        if (level!!.isClientSide) {
-            spawnParticleBurst(next.isAtLeast(WindLevel.GALE))
-            return
-        }
-
-        playSound()
-        if (next == WindLevel.DWINDLING) next = next.nextActiveLevel()
-        setBlockWind(next)
-    }
-
-    fun isCreativeFuel(stack: ItemStack): Boolean {
-        return AllItems.CREATIVE_BLAZE_CAKE.isIn(stack)
     }
 
     val isValidBlockAbove: Boolean
@@ -283,23 +166,8 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
         )
     }
 
-    protected val windLevel: WindLevel
-        get() {
-            var level = WindLevel.BREEZY
-            when (activeFuel) {
-                FuelType.SPECIAL -> level = WindLevel.GALE
-                FuelType.NORMAL -> {
-                    val lowPercent = remainingBurnTime.toDouble() / MAX_HEAT_CAPACITY < 0.0125
-                    level = if (lowPercent) WindLevel.DWINDLING else WindLevel.SQUALL
-                }
-
-                FuelType.NONE -> {}
-                else -> {}
-            }
-            return level
-        }
-
     protected fun spawnParticles(windLevel: WindLevel, burstMult: Double) {
+        /*
         if (level == null) return
         if (windLevel == WindLevel.NONE) return
 
@@ -334,12 +202,13 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
             level!!.addParticle(ParticleTypes.FLAME, v2.x, v2.y, v2.z, 0.0, yMotion, 0.0)
         }
         return
+        */
     }
 
     fun spawnParticleBurst(soulFlame: Boolean) {
         val c = VecHelper.getCenterOf(worldPosition)
         val r = level!!.random
-        for (i in 0..19) {
+        repeat(if (soulFlame) 5 else 19) {
             val offset = VecHelper.offsetRandomly(Vec3.ZERO, r, .5f)
                 .multiply(1.0, .25, 1.0)
                 .normalize()
@@ -348,8 +217,8 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
             val m = offset.scale((1 / 32f).toDouble())
 
             level!!.addParticle(
-                if (soulFlame) ParticleTypes.SOUL_FIRE_FLAME else ParticleTypes.FLAME, v.x, v.y, v.z, m.x, m.y,
-                m.z
+                if (soulFlame) ParticleTypes.GUST else ParticleTypes.SMALL_GUST,
+                v.x, v.y, v.z, m.x, m.y, m.z
             )
         }
     }
@@ -382,7 +251,7 @@ open class BreezeBreatherBlockEntity(pos: BlockPos, state: BlockState) :
         Lighting.setupForEntityInInventory()
 
         val cutout: VertexConsumer = graphics.bufferSource().getBuffer(RenderType.cutoutMipped())
-        CachedBuffers.partial(AllPartialModels.BLAZE_CAGE, keeperBE.blockState)
+        CachedBuffers.partial(CMPartialModels.BREEZE_CAGE, keeperBE.blockState)
             .rotateCentered(horizontalAngle + Mth.PI, Direction.UP)
             .light<SuperByteBuffer>(LightTexture.FULL_BRIGHT)
             .renderInto(matrix, cutout)

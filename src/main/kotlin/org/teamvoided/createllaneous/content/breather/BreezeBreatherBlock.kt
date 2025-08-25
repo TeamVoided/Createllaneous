@@ -47,7 +47,7 @@ class BreezeBreatherBlock(properties: Properties) :
     override fun codec(): MapCodec<out HorizontalDirectionalBlock> = CODEC
 
     init {
-        registerDefaultState(defaultBlockState().setValue(WIND_LEVEL, WindLevel.NONE))
+        registerDefaultState(defaultBlockState().setValue(WIND_LEVEL, WindLevel.BREEZY))
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
@@ -60,11 +60,6 @@ class BreezeBreatherBlock(properties: Properties) :
     override fun getBlockEntityType(): BlockEntityType<out BreezeBreatherBlockEntity> =
         CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get()
 
-    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {
-        return if (state.getValue(WIND_LEVEL) == WindLevel.NONE) null
-        else super.newBlockEntity(pos, state)
-    }
-
     override fun useItemOn(
         stack: ItemStack,
         state: BlockState,
@@ -76,7 +71,7 @@ class BreezeBreatherBlock(properties: Properties) :
     ): ItemInteractionResult {
         val wind = state.getValue(WIND_LEVEL)
 
-        if (AllItems.GOGGLES.isIn(stack) && wind != WindLevel.NONE) return onBlockEntityUseItemOn(
+        if (AllItems.GOGGLES.isIn(stack)) return onBlockEntityUseItemOn(
             level, pos
         ) { bbte: BreezeBreatherBlockEntity ->
             if (bbte.goggles) return@onBlockEntityUseItemOn ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
@@ -93,7 +88,7 @@ class BreezeBreatherBlock(properties: Properties) :
             return ItemInteractionResult.SUCCESS
         }
 
-        if (stack.isEmpty && wind != WindLevel.NONE) return onBlockEntityUseItemOn(
+        if (stack.isEmpty) return onBlockEntityUseItemOn(
             level,
             pos
         ) { bbte: BreezeBreatherBlockEntity ->
@@ -103,83 +98,13 @@ class BreezeBreatherBlock(properties: Properties) :
             ItemInteractionResult.SUCCESS
         }
 
-        //BRASIER BLOCK
-        //if (wind == WindLevel.NONE) {
-        //    if (stack.item is FlintAndSteelItem) {
-        //        level.playSound(
-        //            player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0f,
-        //            level.random.nextFloat() * 0.4f + 0.8f
-        //        )
-        //        if (level.isClientSide) return ItemInteractionResult.SUCCESS
-        //        stack.hurtAndBreak(
-        //            1,
-        //            player,
-        //            if (hand == InteractionHand.MAIN_HAND) EquipmentSlot.MAINHAND else EquipmentSlot.OFFHAND
-        //        )
-        //        level.setBlockAndUpdate(pos, AllBlocks.LIT_BLAZE_BURNER.defaultState)
-        //        return ItemInteractionResult.SUCCESS
-        //    }
-        //    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
-        //}
-
-        val doNotConsume = player.isCreative
-        val forceOverflow = player !is FakePlayer
-
-        val res = tryInsert(state, level, pos, stack, doNotConsume, forceOverflow, false)
-        val leftover = res.getObject()
-        if (!level.isClientSide && !doNotConsume && !leftover.isEmpty) {
-            if (stack.isEmpty) {
-                player.setItemInHand(hand, leftover)
-            } else if (!player.inventory
-                    .add(leftover)
-            ) {
-                player.drop(leftover, false)
-            }
-        }
-
-        return if (res.result == InteractionResult.SUCCESS) ItemInteractionResult.SUCCESS else ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
-    }
-
-    fun tryInsert(
-        state: BlockState,
-        world: Level,
-        pos: BlockPos,
-        stack: ItemStack,
-        doNotConsume: Boolean,
-        forceOverflow: Boolean,
-        simulate: Boolean
-    ): InteractionResultHolder<ItemStack> {
-        if (!state.hasBlockEntity()) return InteractionResultHolder.fail(ItemStack.EMPTY)
-
-        val be =
-            world.getBlockEntity(pos) as? BreezeBreatherBlockEntity
-                ?: return InteractionResultHolder.fail(ItemStack.EMPTY)
-
-        if (be.isCreativeFuel(stack)) {
-            if (!simulate) be.applyCreativeFuel()
-            return InteractionResultHolder.success(ItemStack.EMPTY)
-        }
-        if (!be.tryUpdateFuel(stack, forceOverflow, simulate)) return InteractionResultHolder.fail(ItemStack.EMPTY)
-
-        if (!doNotConsume) {
-            val container = if (stack.hasCraftingRemainingItem()) stack.craftingRemainingItem else ItemStack.EMPTY
-            if (!world.isClientSide) {
-                stack.shrink(1)
-            }
-            return InteractionResultHolder.success(container)
-        }
-        return InteractionResultHolder.success(ItemStack.EMPTY)
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
     }
 
 
-    override fun getStateForPlacement(context: BlockPlaceContext): BlockState {
-        val item = context.itemInHand.item
-        val defaultState = defaultBlockState()
-        if (item !is BlazeBurnerBlockItem) return defaultState
-        val initialHeat = if (item.hasCapturedBlaze()) WindLevel.BREEZY else WindLevel.NONE
-        return defaultState.setValue(WIND_LEVEL, initialHeat)
-            .setValue(FACING, context.horizontalDirection.opposite)
-    }
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState =
+        defaultBlockState().setValue(FACING, context.horizontalDirection.opposite)
+
 
     override fun getShape(
         state: BlockState,
@@ -208,45 +133,36 @@ class BreezeBreatherBlock(properties: Properties) :
     override fun animateTick(state: BlockState, world: Level, pos: BlockPos, random: RandomSource) {
         if (random.nextInt(10) != 0) return
         if (!state.getValue(WIND_LEVEL).isAtLeast(WindLevel.BREEZY)) return
-        world.playLocalSound(
-            pos.x + 0.5, pos.y + 0.5, pos.z + 0.5,
-            SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS,
-            0.5f + random.nextFloat(), random.nextFloat() * 0.7f + 0.6f, false
-        )
+        //world.playLocalSound(
+        //    pos.x + 0.5, pos.y + 0.5, pos.z + 0.5,
+        //    SoundEvents.BREEZE_IDLE_GROUND, SoundSource.BLOCKS,
+        //    0.5f + random.nextFloat(), random.nextFloat() * 0.7f + 0.6f, false
+        //)
     }
 
     enum class WindLevel : StringRepresentable {
-        NONE, BREEZY, DWINDLING, SQUALL, GALE;
+        BREEZY, DWINDLING, SQUALL, GALE;
 
-        /** NONE: Empty
-         * BREEZY, Smouldering: Has breeze
+        /**BREEZY, Smouldering: Has breeze
          * DWINDLING, Fading: Has a small amount of wind time left
          * SQUALL, Kindled: Has wind time
          * GALE, Seething: Superheated
          */
 
-        fun nextActiveLevel(): WindLevel {
-            return byIndex(ordinal % (entries.size - 1) + 1)
-        }
+        fun nextActiveLevel(): WindLevel = byIndex(ordinal % (entries.size - 1) + 1)
 
-        fun isAtLeast(windLevel: WindLevel): Boolean {
-            return this.ordinal >= windLevel.ordinal
-        }
+        fun isAtLeast(windLevel: WindLevel): Boolean = this.ordinal >= windLevel.ordinal
 
-        override fun getSerializedName(): String {
-            return Lang.asId(name)
-        }
+        override fun getSerializedName(): String = Lang.asId(name)
 
         companion object {
             val CODEC: Codec<WindLevel> = StringRepresentable.fromEnum { entries.toTypedArray() }
-            fun byIndex(index: Int): WindLevel {
-                return entries[index]
-            }
+            fun byIndex(index: Int): WindLevel = entries[index]
         }
     }
 
     class BreezeBreatherConductor : ConductorBlockInteractionBehavior() {
-        override fun isValidConductor(state: BlockState): Boolean = state.getValue(WIND_LEVEL) != WindLevel.NONE
+        override fun isValidConductor(state: BlockState): Boolean = true
     }
 
     companion object {
@@ -257,7 +173,7 @@ class BreezeBreatherBlock(properties: Properties) :
 
         fun getWindLevelOf(blockState: BlockState): WindLevel {
             return if (blockState.hasProperty(WIND_LEVEL)) blockState.getValue(WIND_LEVEL)
-            else WindLevel.NONE
+            else WindLevel.BREEZY
         }
     }
 }

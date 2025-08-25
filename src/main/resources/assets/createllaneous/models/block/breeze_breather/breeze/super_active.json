@@ -1,0 +1,7 @@
+{
+	"parent": "createllaneous:block/breeze_breather/breeze/parent/breeze_8",
+	"textures": {
+		"breeze": "createllaneous:block/breeze_breather/breeze_super_active",
+		"particle": "#breeze"
+	}
+}

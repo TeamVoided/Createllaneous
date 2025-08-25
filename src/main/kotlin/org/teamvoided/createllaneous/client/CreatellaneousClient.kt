@@ -30,6 +30,7 @@ object CreatellaneousClient {
         setLayer(CMBlocks.BRASS_GRATE, RenderType.CUTOUT)
         setLayer(CMBlocks.BREEZE_BREATHER, RenderType.CUTOUT)
         registerVisualer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
+        CMPartialModels.init()
     }
 
     private fun registerRender(event: EntityRenderersEvent.RegisterRenderers){

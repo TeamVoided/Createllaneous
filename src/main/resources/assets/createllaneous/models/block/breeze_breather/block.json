@@ -4,7 +4,7 @@
 	"flip_v": true,
 	"model": "create:models/block/blaze_burner/blaze_cage.obj",
 	"textures": {
-		"0": "create:block/blaze_heater_brazier",
+		"0": "createllaneous:block/breeze_breather/cage",
 		"particle": "create:block/dark_metal_block"
 	},
 	"display": {

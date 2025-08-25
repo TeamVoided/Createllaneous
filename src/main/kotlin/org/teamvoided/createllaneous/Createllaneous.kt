@@ -1,7 +1,7 @@
 package org.teamvoided.createllaneous
 
-import org.teamvoided.createllaneous.init.CMBlocks
-import org.teamvoided.createllaneous.init.CMItems
+import com.simibubi.create.Create
+import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent
@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.teamvoided.createllaneous.data.gen.gatherData
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
+import org.teamvoided.createllaneous.init.CMBlocks
+import org.teamvoided.createllaneous.init.CMItems
 import org.teamvoided.createllaneous.init.CMTabs
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
@@ -36,5 +38,10 @@ object Createllaneous {
 
     fun onCommonSetup(event: FMLCommonSetupEvent) {
         LOGGER.log(Level.INFO, "Hello! This is working!")
+        CMBlocks.init()
     }
+
+    fun mc(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
+    fun id(path: String): ResourceLocation = id(MODID, path)
+    fun id(namespace: String, path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(namespace, path)
 }

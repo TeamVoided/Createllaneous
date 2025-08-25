@@ -1,5 +1,7 @@
 package org.teamvoided.createllaneous.init
 
+import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour
 import com.simibubi.create.content.decoration.TrainTrapdoorBlock
 import com.simibubi.create.foundation.data.SharedProperties
 import net.minecraft.world.item.BlockItem
@@ -11,6 +13,8 @@ import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.teamvoided.createllaneous.Createllaneous
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock
+import org.teamvoided.createllaneous.content.breather.BreezeBreatherMovementBehavior
+import org.teamvoided.createllaneous.content.breather.EmptyBreezeBreatherBlock
 
 object CMBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(Createllaneous.MODID)
@@ -28,7 +32,6 @@ object CMBlocks {
         SlabBlock(BlockBehaviour.Properties.ofFullCopy(CUT_BRASS.get()))
     }
 
-    /** ask ender what in the world do i do in [model].json for cutout */
     val BRASS_GRATE = register("brass_grate") {
         WaterloggedTransparentBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))
     }
@@ -37,13 +40,16 @@ object CMBlocks {
         //TrapDoorBlock(SlidingDoorBlock.TRAIN_SET_TYPE.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))
     }
 
-    /** what is a visual? */
+    val EMPTY_BREEZE_BREATHER = register("empty_breeze_breather") {
+        EmptyBreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
+    }
     val BREEZE_BREATHER = register("breeze_breather") {
-        BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
+        BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(EMPTY_BREEZE_BREATHER.get()))
     }
 
-    init {
-        //MovingInteractionBehaviour.interactionBehaviour<BreezeBreatherBlock>(BreezeBreatherBlock.BreezeBreatherConductor())
+    fun init() {
+        MovementBehaviour.movementBehaviour<BreezeBreatherBlock>(BreezeBreatherMovementBehavior())
+        MovingInteractionBehaviour.interactionBehaviour<BreezeBreatherBlock>(BreezeBreatherBlock.BreezeBreatherConductor())
     }
 
     fun <T : Block> register(name: String, blockSupplier: () -> T): DeferredBlock<T> {

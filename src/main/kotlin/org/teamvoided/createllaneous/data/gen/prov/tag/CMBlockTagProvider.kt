@@ -32,15 +32,28 @@ class CMBlockTagProvider(
         )
 
         tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag).add(
+            CMBlocks.BRASS_GRATE.get(),
+            CMBlocks.BRASS_TRAPDOOR.get(),
+
+            Blocks.LIGHTNING_ROD,
+
             Blocks.COPPER_BLOCK,
             Blocks.EXPOSED_COPPER,
             Blocks.WEATHERED_COPPER,
             Blocks.OXIDIZED_COPPER,
 
             Blocks.CUT_COPPER,
+            Blocks.CUT_COPPER_STAIRS,
+            Blocks.CUT_COPPER_SLAB,
             Blocks.EXPOSED_CUT_COPPER,
+            Blocks.EXPOSED_CUT_COPPER_STAIRS,
+            Blocks.EXPOSED_CUT_COPPER_SLAB,
             Blocks.WEATHERED_CUT_COPPER,
+            Blocks.WEATHERED_CUT_COPPER_STAIRS,
+            Blocks.WEATHERED_CUT_COPPER_SLAB,
             Blocks.OXIDIZED_CUT_COPPER,
+            Blocks.OXIDIZED_CUT_COPPER_STAIRS,
+            Blocks.OXIDIZED_CUT_COPPER_SLAB,
 
             Blocks.CHISELED_COPPER,
             Blocks.EXPOSED_CHISELED_COPPER,
@@ -52,10 +65,65 @@ class CMBlockTagProvider(
             Blocks.WEATHERED_COPPER_GRATE,
             Blocks.OXIDIZED_COPPER_GRATE,
 
-            // (ender) add the rest of them at some point
+            Blocks.COPPER_BULB,
+            Blocks.EXPOSED_COPPER_BULB,
+            Blocks.WEATHERED_COPPER_BULB,
+            Blocks.OXIDIZED_COPPER_BULB,
 
-            CMBlocks.BRASS_GRATE.get(),
-            CMBlocks.BRASS_TRAPDOOR.get(),
+            Blocks.COPPER_DOOR,
+            Blocks.EXPOSED_COPPER_DOOR,
+            Blocks.WEATHERED_COPPER_DOOR,
+            Blocks.OXIDIZED_COPPER_DOOR,
+
+            Blocks.COPPER_TRAPDOOR,
+            Blocks.EXPOSED_COPPER_TRAPDOOR,
+            Blocks.WEATHERED_COPPER_TRAPDOOR,
+            Blocks.OXIDIZED_COPPER_TRAPDOOR,
+
+            Blocks.WAXED_COPPER_BLOCK,
+            Blocks.WAXED_EXPOSED_COPPER,
+            Blocks.WAXED_WEATHERED_COPPER,
+            Blocks.WAXED_OXIDIZED_COPPER,
+
+            Blocks.WAXED_CUT_COPPER,
+            Blocks.WAXED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_CUT_COPPER_SLAB,
+            Blocks.WAXED_EXPOSED_CUT_COPPER,
+            Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB,
+            Blocks.WAXED_WEATHERED_CUT_COPPER,
+            Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB,
+
+            Blocks.WAXED_CHISELED_COPPER,
+            Blocks.WAXED_EXPOSED_CHISELED_COPPER,
+            Blocks.WAXED_WEATHERED_CHISELED_COPPER,
+            Blocks.WAXED_OXIDIZED_CHISELED_COPPER,
+
+            Blocks.WAXED_COPPER_GRATE,
+            Blocks.WAXED_EXPOSED_COPPER_GRATE,
+            Blocks.WAXED_WEATHERED_COPPER_GRATE,
+            Blocks.WAXED_OXIDIZED_COPPER_GRATE,
+
+            Blocks.WAXED_COPPER_BULB,
+            Blocks.WAXED_EXPOSED_COPPER_BULB,
+            Blocks.WAXED_WEATHERED_COPPER_BULB,
+            Blocks.WAXED_OXIDIZED_COPPER_BULB,
+
+            Blocks.WAXED_COPPER_DOOR,
+            Blocks.WAXED_EXPOSED_COPPER_DOOR,
+            Blocks.WAXED_WEATHERED_COPPER_DOOR,
+            Blocks.WAXED_OXIDIZED_COPPER_DOOR,
+
+            Blocks.WAXED_COPPER_TRAPDOOR,
+            Blocks.WAXED_EXPOSED_COPPER_TRAPDOOR,
+            Blocks.WAXED_WEATHERED_COPPER_TRAPDOOR,
+            Blocks.WAXED_OXIDIZED_COPPER_TRAPDOOR,
+
+            // (ender) add the rest of them at some point
         )
 
         tag(BlockTags.NEEDS_IRON_TOOL).add(

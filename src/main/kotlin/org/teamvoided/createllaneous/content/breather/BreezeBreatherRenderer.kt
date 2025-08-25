@@ -3,10 +3,12 @@ package org.teamvoided.createllaneous.content.breather
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.simibubi.create.AllPartialModels
-import com.simibubi.create.AllSpriteShifts
+import com.simibubi.create.content.contraptions.behaviour.MovementContext
+import com.simibubi.create.content.contraptions.render.ContraptionMatrices
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer
 import dev.engine_room.flywheel.lib.model.baked.PartialModel
 import net.createmod.catnip.animation.AnimationTickHolder
+import net.createmod.catnip.animation.LerpedFloat
 import net.createmod.catnip.math.AngleHelper
 import net.createmod.catnip.render.CachedBuffers
 import net.createmod.catnip.render.SuperByteBuffer
@@ -17,8 +19,8 @@ import net.minecraft.core.Direction
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
+import org.teamvoided.createllaneous.client.CMPartialModels
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock.WindLevel
-import kotlin.math.floor
 
 class BreezeBreatherRenderer() :
     SafeBlockEntityRenderer<BreezeBreatherBlockEntity>() {
@@ -31,8 +33,7 @@ class BreezeBreatherRenderer() :
         light: Int,
         overlay: Int,
     ) {
-        val windLevel = be.heatLevelFromBlock
-        if (windLevel == WindLevel.NONE) return
+        val windLevel = be.windLevelFromBlock
 
         val level = be.level
         val blockState = be.blockState
@@ -53,15 +54,15 @@ class BreezeBreatherRenderer() :
 
 
     companion object {
-        fun getBreezeModel(windLevel: WindLevel, blockAbove: Boolean): PartialModel {
+        fun getBreezeModel(windLevel: WindLevel): PartialModel {
             return if (windLevel.isAtLeast(WindLevel.GALE)) {
-                if (blockAbove) AllPartialModels.BLAZE_SUPER_ACTIVE
-                else AllPartialModels.BLAZE_SUPER
+                CMPartialModels.BREEZE_SUPER
+            } else if (windLevel.isAtLeast(WindLevel.SQUALL)) {
+                CMPartialModels.BREEZE_IDLE
             } else if (windLevel.isAtLeast(WindLevel.DWINDLING)) {
-                if (blockAbove && windLevel.isAtLeast(WindLevel.SQUALL)) AllPartialModels.BLAZE_ACTIVE
-                else AllPartialModels.BLAZE_IDLE
+                CMPartialModels.BREEZE_INERT
             } else {
-                AllPartialModels.BLAZE_INERT
+                CMPartialModels.BREEZE_TINY
             }
         }
 
@@ -70,7 +71,6 @@ class BreezeBreatherRenderer() :
             level: Level?, blockState: BlockState, windLevel: WindLevel, animation: Float, horizontalAngle: Float,
             canDrawFlame: Boolean, drawGoggles: Boolean, drawHat: PartialModel?, hashCode: Int,
         ) {
-            val blockAbove = animation > 0.125f
             val time = AnimationTickHolder.getRenderTime(level)
             val renderTick = time + (hashCode % 13) * 16f
             val offsetMult = (if (windLevel.isAtLeast(WindLevel.DWINDLING)) 64 else 16).toFloat()
@@ -81,7 +81,7 @@ class BreezeBreatherRenderer() :
 
             ms.pushPose()
 
-            val breezeModel = getBreezeModel(windLevel, blockAbove)
+            val breezeModel = getBreezeModel(windLevel)
 
             val breezeBuffer = CachedBuffers.partial(breezeModel, blockState)
             if (modelTransform != null) breezeBuffer.transform(modelTransform)
@@ -89,8 +89,8 @@ class BreezeBreatherRenderer() :
             draw(breezeBuffer, horizontalAngle, ms, bufferSource.getBuffer(RenderType.solid()))
 
             if (drawGoggles) {
-                val gogglesModel = if (breezeModel == AllPartialModels.BLAZE_INERT
-                ) AllPartialModels.BLAZE_GOGGLES_SMALL else AllPartialModels.BLAZE_GOGGLES
+                val gogglesModel = if (breezeModel == CMPartialModels.BREEZE_INERT) AllPartialModels.BLAZE_GOGGLES_SMALL
+                else AllPartialModels.BLAZE_GOGGLES
 
                 val gogglesBuffer = CachedBuffers.partial(gogglesModel, blockState)
                 if (modelTransform != null) gogglesBuffer.transform(modelTransform)
@@ -102,7 +102,7 @@ class BreezeBreatherRenderer() :
                 val hatBuffer = CachedBuffers.partial(drawHat, blockState)
                 if (modelTransform != null) hatBuffer.transform(modelTransform)
                 hatBuffer.translate(0f, headY, 0f)
-                if (breezeModel == AllPartialModels.BLAZE_INERT) {
+                if (breezeModel == CMPartialModels.BREEZE_INERT) {
                     hatBuffer.translateY(0.5f)
                         .center()
                         .scale(0.75f)
@@ -118,6 +118,7 @@ class BreezeBreatherRenderer() :
                     .renderInto(ms, cutout)
             }
 
+            /*
             if (windLevel.isAtLeast(WindLevel.DWINDLING)) {
                 val rodsModel = if (windLevel == WindLevel.GALE) AllPartialModels.BLAZE_BURNER_SUPER_RODS
                 else AllPartialModels.BLAZE_BURNER_RODS
@@ -162,8 +163,32 @@ class BreezeBreatherRenderer() :
                 val cutout = bufferSource.getBuffer(RenderType.cutoutMipped())
                 draw(flameBuffer, horizontalAngle, ms, cutout)
             }
-
+            */
             ms.popPose()
+        }
+
+        fun renderInContraption(
+            context: MovementContext,
+            matrices: ContraptionMatrices,
+            bufferSource: MultiBufferSource,
+            headAngle: LerpedFloat,
+            conductor: Boolean
+        ) {
+            val state = context.state
+            val windLevel = BreezeBreatherBlock.getWindLevelOf(state)
+
+            val level = context.world
+            val horizontalAngle =
+                AngleHelper.rad(headAngle.getValue(AnimationTickHolder.getPartialTicks(level)).toDouble())
+            val drawGoggles = context.blockEntityData.contains("Goggles")
+            val drawHat = conductor || context.blockEntityData.contains("TrainHat")
+            val hashCode = context.hashCode()
+
+            renderShared(
+                matrices.viewProjection, matrices.model, bufferSource,
+                level, state, windLevel, 0f, horizontalAngle,
+                false, drawGoggles, if (drawHat) AllPartialModels.TRAIN_HAT else null, hashCode
+            )
         }
 
         private fun draw(buffer: SuperByteBuffer, horizontalAngle: Float, ms: PoseStack, vc: VertexConsumer) {

@@ -1,0 +1,8 @@
+{
+  "parent": "createllaneous:block/breeze_breather/breeze/parent/breeze_6",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "breeze": "createllaneous:block/breeze_breather/breeze_inert",
+    "particle": "#breeze"
+  }
+}

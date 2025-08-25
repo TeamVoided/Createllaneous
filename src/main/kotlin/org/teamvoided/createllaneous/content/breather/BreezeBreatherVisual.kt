@@ -38,16 +38,15 @@ class BreezeBreatherVisual(ctx: VisualizationContext?, blockEntity: BreezeBreath
     private var goggles: TransformedInstance? = null
     private var hat: TransformedInstance? = null
 
-    private var validBlockAbove: Boolean
 
     init {
         windLevel = WindLevel.BREEZY
-        validBlockAbove = blockEntity.isValidBlockAbove
 
-        val blazeModel = BreezeBreatherRenderer.getBreezeModel(windLevel, validBlockAbove)
+        val blazeModel = BreezeBreatherRenderer.getBreezeModel(windLevel)
         isInert = blazeModel == AllPartialModels.BLAZE_INERT
 
-        head = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(blazeModel))
+        head = instancerProvider()
+            .instancer(InstanceTypes.TRANSFORMED, Models.partial(blazeModel))
             .createInstance()
 
         head.light(LightTexture.FULL_BRIGHT)
@@ -71,22 +70,21 @@ class BreezeBreatherVisual(ctx: VisualizationContext?, blockEntity: BreezeBreath
         val animation = blockEntity!!.headAnimation.getValue(partialTicks) * .175f
 
         val validBlockAbove = animation > 0.125f
-        val heatLevel = blockEntity!!.getWindLevelForRender()
+        val windLevel = blockEntity!!.getWindLevelForRender()
 
-        if (validBlockAbove != this.validBlockAbove || heatLevel != this.windLevel) {
-            this.validBlockAbove = validBlockAbove
+        if (windLevel != this.windLevel) {
 
-            val blazeModel = BreezeBreatherRenderer.getBreezeModel(heatLevel, validBlockAbove)
+            val blazeModel = BreezeBreatherRenderer.getBreezeModel(windLevel)
             instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(blazeModel))
                 .stealInstance(head)
 
-            val needsRods = heatLevel.isAtLeast(WindLevel.DWINDLING)
-            val hasRods = this.windLevel.isAtLeast(WindLevel.DWINDLING)
+            val needsRods = false //heatLevel.isAtLeast(WindLevel.DWINDLING)
+            val hasRods = false //this.windLevel.isAtLeast(WindLevel.DWINDLING)
 
             if (needsRods && !hasRods) {
-                val rodsModel = if (heatLevel == WindLevel.GALE) AllPartialModels.BLAZE_BURNER_SUPER_RODS
+                val rodsModel = if (windLevel == WindLevel.GALE) AllPartialModels.BLAZE_BURNER_SUPER_RODS
                 else AllPartialModels.BLAZE_BURNER_RODS
-                val rodsModel2 = if (heatLevel == WindLevel.GALE) AllPartialModels.BLAZE_BURNER_SUPER_RODS_2
+                val rodsModel2 = if (windLevel == WindLevel.GALE) AllPartialModels.BLAZE_BURNER_SUPER_RODS_2
                 else AllPartialModels.BLAZE_BURNER_RODS_2
 
                 smallRods = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(rodsModel))
@@ -103,7 +101,7 @@ class BreezeBreatherVisual(ctx: VisualizationContext?, blockEntity: BreezeBreath
                 largeRods = null
             }
 
-            this.windLevel = heatLevel
+            this.windLevel = windLevel
         }
 
         // Switch between showing/hiding the flame
@@ -144,7 +142,7 @@ class BreezeBreatherVisual(ctx: VisualizationContext?, blockEntity: BreezeBreath
         val hashCode = blockEntity.hashCode()
         val time = AnimationTickHolder.getRenderTime(level)
         val renderTick = time + (hashCode % 13) * 16f
-        val offsetMult = (if (heatLevel.isAtLeast(WindLevel.DWINDLING)) 64 else 16).toFloat()
+        val offsetMult = (if (windLevel.isAtLeast(WindLevel.DWINDLING)) 64 else 16).toFloat()
         val offset = Mth.sin(((renderTick / 16f) % (2 * Math.PI)).toFloat()) / offsetMult
         val headY = offset - (animation * .75f)
 
