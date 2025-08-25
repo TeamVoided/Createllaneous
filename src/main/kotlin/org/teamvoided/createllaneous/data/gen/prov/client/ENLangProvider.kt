@@ -7,6 +7,7 @@ import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.init.CMBlocks
 import org.teamvoided.createllaneous.init.CMItems
 import org.teamvoided.createllaneous.utils.Lang
+import com.simibubi.create.Create.ID as CREATE
 
 class ENLangProvider(o: PackOutput) : LanguageProvider(o, MODID, "en_us") {
     override fun addTranslations() {
@@ -15,6 +16,8 @@ class ENLangProvider(o: PackOutput) : LanguageProvider(o, MODID, "en_us") {
 
 
         add(Lang.TAB, "Createllaneous")
+        add("$CREATE.item_attributes.$MODID.incomplete", "is Incomplete")
+        add("$CREATE.item_attributes.$MODID.incomplete.inverted", "is Complete")
     }
 
     private fun genLang(identifier: ResourceLocation): String =

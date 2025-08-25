@@ -1,6 +1,5 @@
 package org.teamvoided.createllaneous
 
-import com.simibubi.create.Create
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
@@ -11,6 +10,7 @@ import org.apache.logging.log4j.Logger
 import org.teamvoided.createllaneous.data.gen.gatherData
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import org.teamvoided.createllaneous.init.CMBlocks
+import org.teamvoided.createllaneous.init.CMItemAttributeType
 import org.teamvoided.createllaneous.init.CMItems
 import org.teamvoided.createllaneous.init.CMTabs
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
@@ -25,6 +25,7 @@ object Createllaneous {
         CMBlockEntityTypes.BLOCK_ENTITY_TYPES.register(MOD_BUS)
         CMItems.ITEMS.register(MOD_BUS)
         CMTabs.TABS.register(MOD_BUS)
+        CMItemAttributeType.ITEM_ATTRIBUTE_TYPES.register(MOD_BUS)
 
         MOD_BUS.addListener(::onCommonSetup)
         MOD_BUS.addListener(::onServerSetup)
