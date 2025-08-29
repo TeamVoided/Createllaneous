@@ -1,7 +1,6 @@
 package org.teamvoided.createllaneous.client
 
 import com.simibubi.create.AllPartialModels
-import com.simibubi.create.Create
 import dev.engine_room.flywheel.lib.model.baked.PartialModel
 import org.teamvoided.createllaneous.Createllaneous.id
 
@@ -18,6 +17,8 @@ object CMPartialModels {
     val BREEZE_BURNER_RODS_2: PartialModel = block("breeze_breather/rods_large")
     val BREEZE_BURNER_SUPER_RODS: PartialModel = block("breeze_breather/superheated_rods_small")
     val BREEZE_BURNER_SUPER_RODS_2: PartialModel = block("breeze_breather/superheated_rods_large")
+
+    //val LARGE_BELL: PartialModel = block("peculiar_bell")
 
 
     //val BREEZE_GOGGLES: PartialModel = block("breeze_breather/goggles")

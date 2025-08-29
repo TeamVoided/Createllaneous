@@ -12,12 +12,14 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.material.PushReaction
 import net.neoforged.neoforge.registries.DeferredBlock
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.teamvoided.createllaneous.Createllaneous
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherMovementBehavior
 import org.teamvoided.createllaneous.content.breather.EmptyBreezeBreatherBlock
+import org.teamvoided.createllaneous.content.large_bell.LargeBellBlock
 
 object CMBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(Createllaneous.MODID)
@@ -27,8 +29,14 @@ object CMBlocks {
     val EMPTY_BREEZE_BREATHER = registerNoItem("empty_breeze_breather") {
         EmptyBreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
     }
-    val BREEZE_BREATHER = register("breeze_breather") {
+    val BREEZE_BREATHER = registerNoItem("breeze_breather") {
         BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(EMPTY_BREEZE_BREATHER.get()))
+    }
+    val LARGE_BELL = registerNoItem("large_bell") {
+        LargeBellBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).forceSolidOn().requiresCorrectToolForDrops()
+                .strength(10f).sound(SoundType.ANVIL).pushReaction(PushReaction.BLOCK)
+        )
     }
 
     val CUT_BRASS = register("cut_brass") {

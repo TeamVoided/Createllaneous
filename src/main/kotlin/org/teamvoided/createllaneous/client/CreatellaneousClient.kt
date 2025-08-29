@@ -16,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredBlock
 import org.teamvoided.createllaneous.Createllaneous
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherRenderer
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherVisual
+import org.teamvoided.createllaneous.content.large_bell.LargeBellRenderer
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import org.teamvoided.createllaneous.init.CMBlocks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
@@ -42,6 +43,7 @@ object CreatellaneousClient {
 
     private fun registerRender(event: EntityRenderersEvent.RegisterRenderers) {
         event.registerBlockEntityRenderer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get()) { BreezeBreatherRenderer() }
+        event.registerBlockEntityRenderer(CMBlockEntityTypes.LARGE_BELL_BLOCK_ENTITY.get()) { LargeBellRenderer() }
     }
 
     fun <T : BlockEntity> registerVisualizer(
