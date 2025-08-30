@@ -20,6 +20,7 @@ import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlock
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherMovementBehavior
 import org.teamvoided.createllaneous.content.breather.EmptyBreezeBreatherBlock
 import org.teamvoided.createllaneous.content.large_bell.LargeBellBlock
+import org.teamvoided.createllaneous.content.large_bell.LargeBellStructuralBlock
 
 object CMBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(Createllaneous.MODID)
@@ -37,6 +38,9 @@ object CMBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).forceSolidOn().requiresCorrectToolForDrops()
                 .strength(10f).sound(SoundType.ANVIL).pushReaction(PushReaction.BLOCK)
         )
+    }
+    val LARGE_BELL_STRUCTURAL = registerNoItem("large_bell_structural") {
+        LargeBellStructuralBlock(BlockBehaviour.Properties.ofFullCopy(LARGE_BELL.get()))
     }
 
     val CUT_BRASS = register("cut_brass") {

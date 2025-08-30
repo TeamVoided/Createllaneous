@@ -2,6 +2,7 @@ package org.teamvoided.createllaneous.content.large_bell
 
 import com.mojang.serialization.MapCodec
 import com.simibubi.create.foundation.block.IBE
+import net.createmod.catnip.data.Iterate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.BellBlock
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
@@ -29,6 +31,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.BlockHitResult
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
+import org.teamvoided.createllaneous.init.CMBlocks
 import kotlin.math.sin
 
 class LargeBellBlock(properties: Properties) : BaseEntityBlock(properties), IBE<LargeBellBlockEntity> {
@@ -95,21 +98,29 @@ class LargeBellBlock(properties: Properties) : BaseEntityBlock(properties), IBE<
         val flag = level.hasNeighborSignal(pos)
         if (flag != state.getValue(POWERED)) {
             if (flag) {
-                this.attemptToRing(level, pos, null, 500)
+                this.attemptToRing(level, pos, null, LargeBellBlockEntity.REDSTONE_ID)
             }
-
             level.setBlockAndUpdate(pos, state.setValue(POWERED, flag))
         }
     }
 
-    fun attemptToRing(level: Level, pos: BlockPos, direction: Direction?, ticks: Int = 50): Boolean {
-        return this.attemptToRing(null, level, pos, direction, ticks)
-    }
+    fun attemptToRing(
+        level: Level,
+        pos: BlockPos,
+        direction: Direction?,
+        type: Int = LargeBellBlockEntity.SMALL_HIT_ID
+    ): Boolean = this.attemptToRing(null, level, pos, direction, type)
 
-    fun attemptToRing(entity: Entity?, level: Level, pos: BlockPos, direction: Direction?, ticks: Int = 50): Boolean {
+    fun attemptToRing(
+        entity: Entity?,
+        level: Level,
+        pos: BlockPos,
+        direction: Direction?,
+        type: Int = LargeBellBlockEntity.SMALL_HIT_ID
+    ): Boolean {
         val blockentity = level.getBlockEntity(pos)
         if (!level.isClientSide && blockentity is LargeBellBlockEntity) {
-            blockentity.onHit(direction, ticks)
+            blockentity.onHit(direction, type)
             level.gameEvent(entity, GameEvent.BLOCK_CHANGE, pos)
             return true
         } else {
@@ -119,7 +130,7 @@ class LargeBellBlock(properties: Properties) : BaseEntityBlock(properties), IBE<
 
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
-        //val pos = context.clickedPos
+        val pos = context.clickedPos
 
         //for (x in -1..1) {
         //    for (y in -1..1) {
@@ -136,21 +147,21 @@ class LargeBellBlock(properties: Properties) : BaseEntityBlock(properties), IBE<
     }
 
     public override fun tick(pState: BlockState, pLevel: ServerLevel, pPos: BlockPos, pRandom: RandomSource) {
-        //for (side in Iterate.directions) {
-        //    for (secondary in Iterate.falseAndTrue) {
-        //        val targetSide = if (secondary) side.getClockWise(axis) else side
-        //        val structurePos = (if (secondary) pPos.relative(side) else pPos).relative(targetSide)
-        //        val occupiedState = pLevel.getBlockState(structurePos)
-        //        val requiredStructure = AllBlocks.WATER_WHEEL_STRUCTURAL.defaultState
-        //            .setValue(WaterWheelStructuralBlock.FACING, targetSide.opposite)
-        //        if (occupiedState == requiredStructure) continue
-        //        if (!occupiedState.canBeReplaced()) {
-        //            pLevel.destroyBlock(pPos, false)
-        //            return
-        //        }
-        //        pLevel.setBlockAndUpdate(structurePos, requiredStructure)
-        //    }
-        //}
+        for (side in Iterate.directions) {
+            for (secondary in Iterate.falseAndTrue) {
+                val targetSide = if (secondary) side.getClockWise(Direction.Axis.Y) else side
+                val structurePos = (if (secondary) pPos.relative(side) else pPos).relative(targetSide)
+                val occupiedState = pLevel.getBlockState(structurePos)
+                val requiredStructure = CMBlocks.LARGE_BELL_STRUCTURAL.get().defaultBlockState()
+                    .setValue(DirectionalBlock.FACING, targetSide.opposite)
+                if (occupiedState == requiredStructure) continue
+                if (!occupiedState.canBeReplaced()) {
+                    pLevel.destroyBlock(pPos, false)
+                    return
+                }
+                pLevel.setBlockAndUpdate(structurePos, requiredStructure)
+            }
+        }
     }
 
     public override fun getRenderShape(pState: BlockState): RenderShape = RenderShape.ENTITYBLOCK_ANIMATED

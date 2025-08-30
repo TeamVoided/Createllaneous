@@ -42,14 +42,11 @@ class LargeBellRenderer : SafeBlockEntityRenderer<LargeBellBlockEntity>() {
         }
 
         val vb: VertexConsumer = bufferSource.getBuffer(RenderType.cutoutMipped())
-        val quaternionf = Quaternionf().rotateZ(f1).rotateX(f2)
+        val quaternionf = Quaternionf().rotateX(f1).rotateZ(f2)
         CachedBuffers.block(blockState)
             .rotateAround(quaternionf, 0.5f, 2f, 0.5f)
             .light<SuperByteBuffer>(255)
             .renderInto(ms, vb)
-
-        //this.bellBody.xRot = f1
-        //this.bellBody.zRot = f2
     }
 
     override fun getViewDistance(): Int = super.getViewDistance() * 4

@@ -21,35 +21,44 @@ class LargeBellBlockEntity(pos: BlockPos, state: BlockState) :
     var clickDirection: Direction? = null
 
     override fun triggerEvent(id: Int, type: Int): Boolean {
-        if (id == 1) {
-            val direction = type % 10
-            val ticks = (type - direction) / 10
-            this.clickDirection = Direction.from3DDataValue(direction)
-            this.ringingTicks = ticks
-            level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, true))
-            return true
-        } else if (id == 2) {
-            ringingTicks = 0
-            level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, false))
-            return true
-        } else {
-            return super.triggerEvent(id, type)
+        if (id > END_ID) return super.triggerEvent(id, type)
+
+        return when (id) {
+            END_ID -> {
+                ringingTicks = 0
+                level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, false))
+                Minecraft.getInstance().player?.sendSystemMessage(Component.literal("end"))
+                true
+            }
+
+            SMALL_HIT_ID -> if (ringCooldown > 0) true else doSyncThings(50, type)
+            REDSTONE_ID -> doSyncThings(500, type)
+            else -> {
+                Minecraft.getInstance().player?.sendSystemMessage(Component.literal("an oopsie, $type is not a bell type, " + if (level!!.isClientSide) "client" else "server"))
+                true
+            }
         }
     }
 
-    fun onHit(direction: Direction?, ticks: Int = 50) {
+    private fun doSyncThings(addTicks: Int, direction: Int): Boolean {
+        this.clickDirection = Direction.from3DDataValue(direction)
+        val newTicks = ringingTicks + addTicks
+        if (newTicks < MAX_TICKS) ringingTicks = newTicks
+        ringCooldown += COOLDOWN
+        level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, true))
+
+        //Minecraft.getInstance().player?.sendSystemMessage(Component.literal("$direction, $clickDirection, $ringingTicks, " + if (level!!.isClientSide) "client" else "server"))
+        return true
+    }
+
+    fun onHit(direction: Direction?, type: Int) {
         val dir = direction ?: clickDirection ?: Direction.entries[level!!.random.nextInt(4) + 2]
         val blockpos = this.blockPos
         this.clickDirection = dir
-        if (this.isRinging()) {
-            this.ringingTicks += ticks
-        } else {
-            level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, true))
-        }
-
-        level!!.blockEvent(blockpos, blockState.block, 1, dir.get3DDataValue() + (ringingTicks * 10))
+        level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, true))
+        if (!level!!.isClientSide)
+            level!!.blockEvent(blockpos, blockState.block, type, dir.get3DDataValue())
     }
-
 
     override fun addBehaviours(behaviours: MutableList<BlockEntityBehaviour>) {}
 
@@ -79,6 +88,7 @@ class LargeBellBlockEntity(pos: BlockPos, state: BlockState) :
     //}
 
     fun isRinging(): Boolean = blockState.getValue(LargeBellBlock.RINGING)
+    fun isPowered(): Boolean = blockState.getValue(LargeBellBlock.POWERED)
 
     override fun tick() {
         super.tick()
@@ -87,27 +97,29 @@ class LargeBellBlockEntity(pos: BlockPos, state: BlockState) :
                 level?.setBlockAndUpdate(blockPos, blockState.setValue(LargeBellBlock.RINGING, false))
                 ringingTicks = 0
                 clickDirection = null
-                level!!.blockEvent(blockPos, blockState.block, 2, 0)
+                if (!level!!.isClientSide) level!!.blockEvent(blockPos, blockState.block, END_ID, 0)
             } else {
-                if (ringingTicks % 40 == 0 && ringingTicks > 100)
-                    ring(level!!)
+                if (ringingTicks % PERIOD == 0 && ringingTicks > 150) ring()
+                if (isPowered() && ringingTicks < 400) ringingTicks += PERIOD
                 ringingTicks--
 
-                if (level!!.isClientSide)
-                    Minecraft.getInstance().player?.sendSystemMessage(Component.literal(ringingTicks.toString()))
+                //Minecraft.getInstance().player?.sendSystemMessage(Component.literal((if (level!!.isClientSide) "client" else "server") + " ticking, $ringingTicks"))
             }
         }
         if (ringCooldown > 0) ringCooldown--
     }
 
-    fun ring(level: Level) {
-        level.playSound(null, blockPos, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 2f, 0f)
-    }
+    private fun ring() = level!!.playSound(null, blockPos, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 2f, 0f)
 
     companion object {
         const val COOLDOWN = 10
         const val MAX_TICKS = 800
 
         private const val PERIOD = 40
+
+        const val SMALL_HIT_ID = 1
+        const val REDSTONE_ID = 2
+        const val DAMPEN_ID = 3
+        const val END_ID = 10
     }
 }
