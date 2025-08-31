@@ -2,6 +2,7 @@ package org.teamvoided.createllaneous.data.gen.prov.client
 
 import net.minecraft.data.PackOutput
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.BlockItem
 import net.neoforged.neoforge.common.data.LanguageProvider
 import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.init.CMBlocks
@@ -12,7 +13,7 @@ import com.simibubi.create.Create.ID as CREATE
 class ENLangProvider(o: PackOutput) : LanguageProvider(o, MODID, "en_us") {
     override fun addTranslations() {
         CMBlocks.BLOCKS.entries.forEach { ty { addBlock(it, genLang(it.id)) } }
-        CMItems.ITEMS.entries.forEach { ty { addItem(it, genLang(it.id)) } }
+        CMItems.ITEMS.entries.forEach { if (it.get() !is BlockItem) ty { addItem(it, genLang(it.id)) } }
 
 
         add(Lang.TAB, "Createllaneous")

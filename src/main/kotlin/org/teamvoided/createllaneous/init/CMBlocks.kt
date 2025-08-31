@@ -1,5 +1,6 @@
 package org.teamvoided.createllaneous.init
 
+import com.simibubi.create.AllPartialModels
 import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour
 import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction
@@ -7,6 +8,9 @@ import com.simibubi.create.content.decoration.TrainTrapdoorBlock
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorMovementBehaviour
 import com.simibubi.create.foundation.data.SharedProperties
+import dev.engine_room.flywheel.lib.model.baked.PartialModel
+import net.createmod.catnip.data.Couple
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.*
@@ -92,6 +96,9 @@ object CMBlocks {
             false
         )
     }.doorBlock()
+    val COPPER_CASING_FOLDING_DOOR = register("copper_casing_folding_door") {
+        SlidingDoorBlock.metal(BlockBehaviour.Properties.ofFullCopy(COPPER_CASING_SLIDING_DOOR.get()), true)
+    }.doorBlock()
 
     fun init() {
         MovementBehaviour.REGISTRY.register(BREEZE_BREATHER.get(), BreezeBreatherMovementBehavior())
@@ -101,8 +108,20 @@ object CMBlocks {
         )
 
         DOOR_BLOCKS.forEach {
-            MovingInteractionBehaviour.REGISTRY.register(it.get(), DoorMovingInteraction())
-            MovementBehaviour.REGISTRY.register(it.get(), SlidingDoorMovementBehaviour())
+            val block = it.get()
+            if (block !is SlidingDoorBlock) throw Error("${it.registeredName} is not a sliding door or folding door")
+
+            MovingInteractionBehaviour.REGISTRY.register(block, DoorMovingInteraction())
+            MovementBehaviour.REGISTRY.register(block, SlidingDoorMovementBehaviour())
+
+            if (block.isFoldingDoor) {
+                val model = BuiltInRegistries.BLOCK.getKey(block)
+                //MAKE SURE YOU MATCH THIS WITH WHAT IS IN YOUR BLOCK MODEL DATAGEN (no block/ prefix)
+                AllPartialModels.FOLDING_DOORS[model] = Couple.create(
+                    PartialModel.of(model.withPrefix("block/").withSuffix("_left")),
+                    PartialModel.of(model.withPrefix("block/").withSuffix("_right"))
+                )
+            }
         }
     }
 

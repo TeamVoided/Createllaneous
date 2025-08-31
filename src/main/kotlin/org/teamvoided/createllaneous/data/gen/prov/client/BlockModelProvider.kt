@@ -1,7 +1,10 @@
 package org.teamvoided.createllaneous.data.gen.prov.client
 
 import com.simibubi.create.AllBlocks
+import com.simibubi.create.AllPartialModels
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock
+import dev.engine_room.flywheel.lib.model.baked.PartialModel
+import net.createmod.catnip.data.Couple
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.data.PackOutput
@@ -9,7 +12,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DoorBlock
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.DoorHingeSide
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.Property
 import net.neoforged.neoforge.client.model.generators.*
@@ -27,7 +29,8 @@ class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {
     override fun registerStatesAndModels() {
 
         CMBlocks.DOOR_BLOCKS.forEach {
-            slidingDoorBlock(it.get(), doorSideParticleFromBlockName(it.get()), mc(RenderType.CUTOUT_MIPPED.name))
+            if (it.get() !is SlidingDoorBlock) throw Error("${it.registeredName} is not a sliding door or folding door")
+            slidingDoorBlock(it.get(), doorSideParticleFromBlockName(it.get()))
         }
     }
 
@@ -48,14 +51,19 @@ class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {
         block(block).withSuffix("_side").toString()
 
 
-    fun slidingDoorBlock(block: Block, pair: Pair<String, String>, renderType: ResourceLocation) {
+    fun slidingDoorBlock(block: Block, pair: Pair<String, String>) {
         val texturePath = BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/")
+        val renderType = mc(RenderType.CUTOUT_MIPPED.name)
 
         val top = createDoor(texturePath.toString(), pair, true).renderType(renderType)
         val bottom = createDoor(texturePath.toString(), pair, false).renderType(renderType)
+        if ((block as SlidingDoorBlock).isFoldingDoor) {
+            createFoldedDoor(texturePath, pair, true)
+            createFoldedDoor(texturePath, pair, false)
+
+        }
 
         getVariantBuilder(block).forAllStatesExcept({ state: BlockState ->
-
             val model: ModelFile = if (state.getValue(DoorBlock.HALF) == DoubleBlockHalf.UPPER) top else bottom
             val yRot = ((state.getValue(DoorBlock.FACING)).toYRot().toInt() + 90) % 360
 
@@ -64,7 +72,8 @@ class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {
         }, *arrayOf<Property<*>>(DoorBlock.POWERED, DoorBlock.OPEN, DoorBlock.HINGE, SlidingDoorBlock.VISIBLE))
     }
 
-    private fun createDoor(name: String,  pair: Pair<String, String>, top: Boolean): BlockModelBuilder {
+
+    private fun createDoor(name: String, pair: Pair<String, String>, top: Boolean): BlockModelBuilder {
         val suffix = if (top) "top" else "bottom"
         val string = name + "_" + suffix
 
@@ -73,6 +82,24 @@ class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {
             .texture("particle", pair.second)
             .texture(suffix, string)
             .texture("side", pair.first)
+    }
+
+    private fun createFoldedDoor(
+        texturePath: ResourceLocation,
+        pair: Pair<String, String>,
+        left: Boolean
+    ): BlockModelBuilder {
+        val side = if (left) "left" else "right"
+        val name = texturePath.toString()
+        val modelName = texturePath.withSuffix("_$side") //MAKE SURE YOU MATCH THIS WITH WHAT IS IN YOUR BLOCK INIT INIT
+
+        return models()
+            .withExistingParent(modelName.toString(), id("block/parent/folding_door/fold_$side"))
+            .texture("particle", pair.second)
+            .texture("top", name + "_top")
+            .texture("bottom", name + "_bottom")
+            .texture("side", pair.first)
+            .renderType(mc(RenderType.CUTOUT_MIPPED.name))
     }
 
     fun BlockModelProvider.simpleBlock(block: Block): BlockModelProvider {

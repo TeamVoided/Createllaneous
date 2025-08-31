@@ -100,7 +100,7 @@ class LargeBellBlockEntity(pos: BlockPos, state: BlockState) :
                 if (!level!!.isClientSide) level!!.blockEvent(blockPos, blockState.block, END_ID, 0)
             } else {
                 if (ringingTicks % PERIOD == 0 && ringingTicks > 150) ring()
-                if (isPowered() && ringingTicks < 400) ringingTicks += PERIOD
+                if (isPowered() && ringingTicks < 400) ringingTicks += PERIOD * 2
                 ringingTicks--
 
                 //Minecraft.getInstance().player?.sendSystemMessage(Component.literal((if (level!!.isClientSide) "client" else "server") + " ticking, $ringingTicks"))
