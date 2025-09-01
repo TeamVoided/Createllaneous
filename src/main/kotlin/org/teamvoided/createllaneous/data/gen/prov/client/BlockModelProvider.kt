@@ -17,8 +17,8 @@ import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.Createllaneous.id
 import org.teamvoided.createllaneous.Createllaneous.mc
 import org.teamvoided.createllaneous.data.gen.FH
-import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
 import org.teamvoided.createllaneous.utils.blockKey
+import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
 
 
 class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {

@@ -13,13 +13,7 @@ import org.teamvoided.createllaneous.data.gen.FH
 import org.teamvoided.createllaneous.data.gen.Lookup
 import org.teamvoided.createllaneous.data.tags.CMBlockTags
 import org.teamvoided.createllaneous.init.CMBlocks
-import org.teamvoided.createllaneous.utils.registry.AXE_ABLE
-import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
-import org.teamvoided.createllaneous.utils.registry.IRON_TOOL
-import org.teamvoided.createllaneous.utils.registry.PICKAXE_ABLE
-import org.teamvoided.createllaneous.utils.registry.SLABS
-import org.teamvoided.createllaneous.utils.registry.STAIRS
-import org.teamvoided.createllaneous.utils.registry.TRAPDOORS
+import org.teamvoided.createllaneous.utils.registry.*
 
 class CMBlockTagProvider(o: PackOutput, l: Lookup) : BlockTagsProvider(o, l, MODID, FH) {
     override fun addTags(provider: HolderLookup.Provider) {
@@ -51,9 +45,33 @@ class CMBlockTagProvider(o: PackOutput, l: Lookup) : BlockTagsProvider(o, l, MOD
         )
     }
 
-    fun createllaneous(){
-//        TRAPDOORS.forEach { tag(CMBlockTags.INTERACTABLE_TRAPDOORS).add(it.get()) }
-//        tag(CMBlockTags.INTERACTABLE_TRAPDOORS).add(it.get())
+    fun createllaneous() {
+        TRAPDOORS.forEach { tag(CMBlockTags.TRAIN_TRAPDOORS).add(it.get()) }
+        tag(CMBlockTags.COPPER_DOORS).add(
+            Blocks.COPPER_DOOR,
+            Blocks.EXPOSED_COPPER_DOOR,
+            Blocks.WEATHERED_COPPER_DOOR,
+            Blocks.OXIDIZED_COPPER_DOOR,
+
+            Blocks.WAXED_COPPER_DOOR,
+            Blocks.WAXED_EXPOSED_COPPER_DOOR,
+            Blocks.WAXED_WEATHERED_COPPER_DOOR,
+            Blocks.WAXED_OXIDIZED_COPPER_DOOR,
+        )
+        tag(CMBlockTags.COPPER_TRAPDOORS).add(
+            Blocks.COPPER_TRAPDOOR,
+            Blocks.EXPOSED_COPPER_TRAPDOOR,
+            Blocks.WEATHERED_COPPER_TRAPDOOR,
+            Blocks.OXIDIZED_COPPER_TRAPDOOR,
+
+            Blocks.WAXED_COPPER_TRAPDOOR,
+            Blocks.WAXED_EXPOSED_COPPER_TRAPDOOR,
+            Blocks.WAXED_WEATHERED_COPPER_TRAPDOOR,
+            Blocks.WAXED_OXIDIZED_COPPER_TRAPDOOR,
+        )
+      /*  tag(CMBlockTags.INTERACTABLE).add(
+            Blocks.CRAFTING_TABLE
+        )*/
     }
 
     fun create() {

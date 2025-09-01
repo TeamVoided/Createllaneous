@@ -38,6 +38,7 @@ object Createllaneous {
     fun onCommonSetup(event: FMLCommonSetupEvent) {
         LOGGER.log(Level.INFO, "Hello! This is working!")
         CMBlocks.init()
+        CMBehaviours.init()
     }
 
     fun mc(path: String): ResourceLocation = ResourceLocation.withDefaultNamespace(path)
