@@ -10,7 +10,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 

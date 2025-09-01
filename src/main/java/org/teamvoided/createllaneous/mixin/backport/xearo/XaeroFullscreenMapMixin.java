@@ -1,16 +1,13 @@
 package org.teamvoided.createllaneous.mixin.backport.xearo;
 
+import com.simibubi.create.Create;
+import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.simibubi.create.Create;
-
 import org.teamvoided.createllaneous.backport.XaeroTrainMap;
-
-import net.minecraft.client.gui.GuiGraphics;
 import xaero.map.gui.GuiMap;
 
 @Mixin(GuiMap.class)

@@ -1,6 +1,5 @@
 package org.teamvoided.createllaneous.client
 
-import com.simibubi.create.AllPartialModels
 import dev.engine_room.flywheel.lib.model.baked.PartialModel
 import org.teamvoided.createllaneous.Createllaneous.id
 

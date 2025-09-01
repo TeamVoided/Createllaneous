@@ -8,11 +8,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.teamvoided.createllaneous.data.gen.gatherData
-import org.teamvoided.createllaneous.init.CMBlockEntityTypes
-import org.teamvoided.createllaneous.init.CMBlocks
-import org.teamvoided.createllaneous.init.CMItemAttributeType
-import org.teamvoided.createllaneous.init.CMItems
-import org.teamvoided.createllaneous.init.CMTabs
+import org.teamvoided.createllaneous.init.*
 import org.teamvoided.createllaneous.utils.registerCapabilities
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 

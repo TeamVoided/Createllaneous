@@ -7,17 +7,12 @@ import com.simibubi.create.AllShapes
 import com.simibubi.create.api.behaviour.interaction.ConductorBlockInteractionBehavior
 import com.simibubi.create.content.equipment.wrench.IWrenchable
 import com.simibubi.create.content.logistics.stockTicker.StockTickerInteractionHandler
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlockItem
 import com.simibubi.create.foundation.block.IBE
 import net.createmod.catnip.lang.Lang
 import net.minecraft.core.BlockPos
-import net.minecraft.sounds.SoundEvents
-import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
-import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -26,7 +21,6 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -37,7 +31,6 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.api.distmarker.OnlyIn
-import net.neoforged.neoforge.common.util.FakePlayer
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import kotlin.math.max
 
