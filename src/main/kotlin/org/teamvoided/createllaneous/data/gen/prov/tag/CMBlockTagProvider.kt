@@ -33,7 +33,10 @@ class CMBlockTagProvider(o: PackOutput, l: Lookup) : BlockTagsProvider(o, l, MOD
         SLABS.forEach { tag(BlockTags.SLABS).add(it.get()) }
         STAIRS.forEach { tag(BlockTags.STAIRS).add(it.get()) }
         TRAPDOORS.forEach { tag(BlockTags.TRAPDOORS).add(it.get()) }
-        DOOR_BLOCKS.forEach { tag(BlockTags.WOODEN_DOORS).add(it.get()) }
+        DOOR_BLOCKS.forEach {
+            tag(BlockTags.DOORS).add(it.get())
+            tag(BlockTags.MOB_INTERACTABLE_DOORS).add(it.get())
+        }
     }
 
     fun mining() {

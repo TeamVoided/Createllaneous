@@ -17,19 +17,19 @@ import java.util.concurrent.CompletableFuture
 class CMItemTagProvider(o: PackOutput, l: Lookup, bt: CompletableFuture<TagLookup<Block>>) :
     ItemTagsProvider(o, l, bt, MODID, FH) {
     override fun addTags(provider: HolderLookup.Provider) {
-//        tag(AllTags.AllItemTags.UPRIGHT_ON_BELT.tag).add()
         create()
         copy()
     }
 
     fun create() {
         DOOR_BLOCKS.forEach { tag(AllTags.AllItemTags.CONTRAPTION_CONTROLLED.tag).add(it.asItem()) }
+//        tag(AllTags.AllItemTags.UPRIGHT_ON_BELT.tag).add()
     }
 
     fun copy() {
         copy(BlockTags.SLABS, ItemTags.SLABS)
         copy(BlockTags.STAIRS, ItemTags.STAIRS)
         copy(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS)
-        copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS)
+        copy(BlockTags.DOORS, ItemTags.DOORS)
     }
 }
