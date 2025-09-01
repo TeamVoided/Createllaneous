@@ -11,155 +11,150 @@ import net.neoforged.neoforge.common.data.BlockTagsProvider
 import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.data.gen.FH
 import org.teamvoided.createllaneous.data.gen.Lookup
+import org.teamvoided.createllaneous.data.tags.CMBlockTags
 import org.teamvoided.createllaneous.init.CMBlocks
+import org.teamvoided.createllaneous.utils.registry.AXE_ABLE
+import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
+import org.teamvoided.createllaneous.utils.registry.IRON_TOOL
+import org.teamvoided.createllaneous.utils.registry.PICKAXE_ABLE
+import org.teamvoided.createllaneous.utils.registry.SLABS
+import org.teamvoided.createllaneous.utils.registry.STAIRS
+import org.teamvoided.createllaneous.utils.registry.TRAPDOORS
 
 class CMBlockTagProvider(o: PackOutput, l: Lookup) : BlockTagsProvider(o, l, MODID, FH) {
     override fun addTags(provider: HolderLookup.Provider) {
-        tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag).add(
-            CMBlocks.BRASS_GRATE.get()
-        )
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
-            CMBlocks.CUT_BRASS.get(),
-            CMBlocks.CUT_BRASS_STAIRS.get(),
-            CMBlocks.CUT_BRASS_SLAB.get(),
-            CMBlocks.BRASS_GRATE.get(),
-            CMBlocks.BRASS_TRAPDOOR.get(),
-            CMBlocks.ANDESITE_TRAPDOOR.get(),
-        )
+        shapes()
+        mining()
+        createllaneous()
+        create()
+    }
+
+    fun shapes() {
+        SLABS.forEach { tag(BlockTags.SLABS).add(it.get()) }
+        STAIRS.forEach { tag(BlockTags.STAIRS).add(it.get()) }
+        TRAPDOORS.forEach { tag(BlockTags.TRAPDOORS).add(it.get()) }
+        DOOR_BLOCKS.forEach { tag(BlockTags.WOODEN_DOORS).add(it.get()) }
+    }
+
+    fun mining() {
+        // Automatic
+        PICKAXE_ABLE.forEach { tag(BlockTags.MINEABLE_WITH_PICKAXE).add(it.get()) }
+        AXE_ABLE.forEach { tag(BlockTags.MINEABLE_WITH_AXE).add(it.get()) }
+        IRON_TOOL.forEach { tag(BlockTags.NEEDS_IRON_TOOL).add(it.get()) }
 
         tag(BlockTags.MINEABLE_WITH_AXE).add(
-            CMBlocks.BRASS_TRAPDOOR.get(),
-            CMBlocks.ANDESITE_TRAPDOOR.get(),
-            CMBlocks.COPPER_CASING_TRAPDOOR.get(),
-
             // (ender) Why create?
             AllBlocks.TRAIN_TRAPDOOR.get()
         )
-
-        wrenchPickup()
-
-        tag(BlockTags.NEEDS_IRON_TOOL).add(
-            CMBlocks.CUT_BRASS.get(),
-            CMBlocks.CUT_BRASS_STAIRS.get(),
-            CMBlocks.CUT_BRASS_SLAB.get(),
-            CMBlocks.BRASS_GRATE.get(),
-        )
-
-        tag(BlockTags.NEEDS_IRON_TOOL).add(
-            CMBlocks.CUT_BRASS.get(),
-            CMBlocks.CUT_BRASS_STAIRS.get(),
-            CMBlocks.CUT_BRASS_SLAB.get(),
-            CMBlocks.BRASS_GRATE.get(),
-        )
-
-        tag(BlockTags.SLABS).add(
-            CMBlocks.CUT_BRASS_SLAB.get()
-        )
-
-        tag(BlockTags.STAIRS).add(
-            CMBlocks.CUT_BRASS_STAIRS.get()
-        )
-
-        tag(BlockTags.TRAPDOORS).add(
-            CMBlocks.ANDESITE_TRAPDOOR.get(),
-            CMBlocks.COPPER_CASING_TRAPDOOR.get(),
-            CMBlocks.BRASS_TRAPDOOR.get(),
-        )
-
-//        tag(AllTags.AllBlockTags.BRITTLE.tag).add()
     }
 
-    fun wrenchPickup() = tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag).add(
-        CMBlocks.BRASS_GRATE.get(),
-        CMBlocks.BRASS_TRAPDOOR.get(),
-        CMBlocks.ANDESITE_TRAPDOOR.get(),
+    fun createllaneous(){
+//        TRAPDOORS.forEach { tag(CMBlockTags.INTERACTABLE_TRAPDOORS).add(it.get()) }
+//        tag(CMBlockTags.INTERACTABLE_TRAPDOORS).add(it.get())
+    }
 
-        Blocks.LIGHTNING_ROD,
+    fun create() {
+        // Automatic
+        DOOR_BLOCKS.forEach { tag(AllTags.AllBlockTags.NON_DOUBLE_DOOR.tag).add(it.get()) }
 
-        Blocks.COPPER_BLOCK,
-        Blocks.EXPOSED_COPPER,
-        Blocks.WEATHERED_COPPER,
-        Blocks.OXIDIZED_COPPER,
+        tag(AllTags.AllBlockTags.FAN_TRANSPARENT.tag).add(
+            CMBlocks.BRASS_GRATE.get()
+        )
+//        tag(AllTags.AllBlockTags.BRITTLE.tag).add()
+        wrenchPickup()
+    }
 
-        Blocks.CUT_COPPER,
-        Blocks.CUT_COPPER_STAIRS,
-        Blocks.CUT_COPPER_SLAB,
-        Blocks.EXPOSED_CUT_COPPER,
-        Blocks.EXPOSED_CUT_COPPER_STAIRS,
-        Blocks.EXPOSED_CUT_COPPER_SLAB,
-        Blocks.WEATHERED_CUT_COPPER,
-        Blocks.WEATHERED_CUT_COPPER_STAIRS,
-        Blocks.WEATHERED_CUT_COPPER_SLAB,
-        Blocks.OXIDIZED_CUT_COPPER,
-        Blocks.OXIDIZED_CUT_COPPER_STAIRS,
-        Blocks.OXIDIZED_CUT_COPPER_SLAB,
+    fun wrenchPickup() {
+        tag(AllTags.AllBlockTags.WRENCH_PICKUP.tag).add(
+            CMBlocks.BRASS_GRATE.get(),
 
-        Blocks.CHISELED_COPPER,
-        Blocks.EXPOSED_CHISELED_COPPER,
-        Blocks.WEATHERED_CHISELED_COPPER,
-        Blocks.OXIDIZED_CHISELED_COPPER,
+            Blocks.LIGHTNING_ROD,
 
-        Blocks.COPPER_GRATE,
-        Blocks.EXPOSED_COPPER_GRATE,
-        Blocks.WEATHERED_COPPER_GRATE,
-        Blocks.OXIDIZED_COPPER_GRATE,
+            Blocks.COPPER_BLOCK,
+            Blocks.EXPOSED_COPPER,
+            Blocks.WEATHERED_COPPER,
+            Blocks.OXIDIZED_COPPER,
 
-        Blocks.COPPER_BULB,
-        Blocks.EXPOSED_COPPER_BULB,
-        Blocks.WEATHERED_COPPER_BULB,
-        Blocks.OXIDIZED_COPPER_BULB,
+            Blocks.CUT_COPPER,
+            Blocks.CUT_COPPER_STAIRS,
+            Blocks.CUT_COPPER_SLAB,
+            Blocks.EXPOSED_CUT_COPPER,
+            Blocks.EXPOSED_CUT_COPPER_STAIRS,
+            Blocks.EXPOSED_CUT_COPPER_SLAB,
+            Blocks.WEATHERED_CUT_COPPER,
+            Blocks.WEATHERED_CUT_COPPER_STAIRS,
+            Blocks.WEATHERED_CUT_COPPER_SLAB,
+            Blocks.OXIDIZED_CUT_COPPER,
+            Blocks.OXIDIZED_CUT_COPPER_STAIRS,
+            Blocks.OXIDIZED_CUT_COPPER_SLAB,
 
-        Blocks.COPPER_DOOR,
-        Blocks.EXPOSED_COPPER_DOOR,
-        Blocks.WEATHERED_COPPER_DOOR,
-        Blocks.OXIDIZED_COPPER_DOOR,
+            Blocks.CHISELED_COPPER,
+            Blocks.EXPOSED_CHISELED_COPPER,
+            Blocks.WEATHERED_CHISELED_COPPER,
+            Blocks.OXIDIZED_CHISELED_COPPER,
 
-        Blocks.COPPER_TRAPDOOR,
-        Blocks.EXPOSED_COPPER_TRAPDOOR,
-        Blocks.WEATHERED_COPPER_TRAPDOOR,
-        Blocks.OXIDIZED_COPPER_TRAPDOOR,
+            Blocks.COPPER_GRATE,
+            Blocks.EXPOSED_COPPER_GRATE,
+            Blocks.WEATHERED_COPPER_GRATE,
+            Blocks.OXIDIZED_COPPER_GRATE,
 
-        Blocks.WAXED_COPPER_BLOCK,
-        Blocks.WAXED_EXPOSED_COPPER,
-        Blocks.WAXED_WEATHERED_COPPER,
-        Blocks.WAXED_OXIDIZED_COPPER,
+            Blocks.COPPER_BULB,
+            Blocks.EXPOSED_COPPER_BULB,
+            Blocks.WEATHERED_COPPER_BULB,
+            Blocks.OXIDIZED_COPPER_BULB,
 
-        Blocks.WAXED_CUT_COPPER,
-        Blocks.WAXED_CUT_COPPER_STAIRS,
-        Blocks.WAXED_CUT_COPPER_SLAB,
-        Blocks.WAXED_EXPOSED_CUT_COPPER,
-        Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS,
-        Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB,
-        Blocks.WAXED_WEATHERED_CUT_COPPER,
-        Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS,
-        Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB,
-        Blocks.WAXED_OXIDIZED_CUT_COPPER,
-        Blocks.WAXED_OXIDIZED_CUT_COPPER_STAIRS,
-        Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB,
+            Blocks.COPPER_DOOR,
+            Blocks.EXPOSED_COPPER_DOOR,
+            Blocks.WEATHERED_COPPER_DOOR,
+            Blocks.OXIDIZED_COPPER_DOOR,
 
-        Blocks.WAXED_CHISELED_COPPER,
-        Blocks.WAXED_EXPOSED_CHISELED_COPPER,
-        Blocks.WAXED_WEATHERED_CHISELED_COPPER,
-        Blocks.WAXED_OXIDIZED_CHISELED_COPPER,
+            Blocks.COPPER_TRAPDOOR,
+            Blocks.EXPOSED_COPPER_TRAPDOOR,
+            Blocks.WEATHERED_COPPER_TRAPDOOR,
+            Blocks.OXIDIZED_COPPER_TRAPDOOR,
 
-        Blocks.WAXED_COPPER_GRATE,
-        Blocks.WAXED_EXPOSED_COPPER_GRATE,
-        Blocks.WAXED_WEATHERED_COPPER_GRATE,
-        Blocks.WAXED_OXIDIZED_COPPER_GRATE,
+            Blocks.WAXED_COPPER_BLOCK,
+            Blocks.WAXED_EXPOSED_COPPER,
+            Blocks.WAXED_WEATHERED_COPPER,
+            Blocks.WAXED_OXIDIZED_COPPER,
 
-        Blocks.WAXED_COPPER_BULB,
-        Blocks.WAXED_EXPOSED_COPPER_BULB,
-        Blocks.WAXED_WEATHERED_COPPER_BULB,
-        Blocks.WAXED_OXIDIZED_COPPER_BULB,
+            Blocks.WAXED_CUT_COPPER,
+            Blocks.WAXED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_CUT_COPPER_SLAB,
+            Blocks.WAXED_EXPOSED_CUT_COPPER,
+            Blocks.WAXED_EXPOSED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_EXPOSED_CUT_COPPER_SLAB,
+            Blocks.WAXED_WEATHERED_CUT_COPPER,
+            Blocks.WAXED_WEATHERED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_WEATHERED_CUT_COPPER_SLAB,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER_STAIRS,
+            Blocks.WAXED_OXIDIZED_CUT_COPPER_SLAB,
 
-        Blocks.WAXED_COPPER_DOOR,
-        Blocks.WAXED_EXPOSED_COPPER_DOOR,
-        Blocks.WAXED_WEATHERED_COPPER_DOOR,
-        Blocks.WAXED_OXIDIZED_COPPER_DOOR,
+            Blocks.WAXED_CHISELED_COPPER,
+            Blocks.WAXED_EXPOSED_CHISELED_COPPER,
+            Blocks.WAXED_WEATHERED_CHISELED_COPPER,
+            Blocks.WAXED_OXIDIZED_CHISELED_COPPER,
 
-        Blocks.WAXED_COPPER_TRAPDOOR,
-        Blocks.WAXED_EXPOSED_COPPER_TRAPDOOR,
-        Blocks.WAXED_WEATHERED_COPPER_TRAPDOOR,
-        Blocks.WAXED_OXIDIZED_COPPER_TRAPDOOR,
-    )
+            Blocks.WAXED_COPPER_GRATE,
+            Blocks.WAXED_EXPOSED_COPPER_GRATE,
+            Blocks.WAXED_WEATHERED_COPPER_GRATE,
+            Blocks.WAXED_OXIDIZED_COPPER_GRATE,
+
+            Blocks.WAXED_COPPER_BULB,
+            Blocks.WAXED_EXPOSED_COPPER_BULB,
+            Blocks.WAXED_WEATHERED_COPPER_BULB,
+            Blocks.WAXED_OXIDIZED_COPPER_BULB,
+
+            Blocks.WAXED_COPPER_DOOR,
+            Blocks.WAXED_EXPOSED_COPPER_DOOR,
+            Blocks.WAXED_WEATHERED_COPPER_DOOR,
+            Blocks.WAXED_OXIDIZED_COPPER_DOOR,
+
+            Blocks.WAXED_COPPER_TRAPDOOR,
+            Blocks.WAXED_EXPOSED_COPPER_TRAPDOOR,
+            Blocks.WAXED_WEATHERED_COPPER_TRAPDOOR,
+            Blocks.WAXED_OXIDIZED_COPPER_TRAPDOOR,
+        )
+    }
 }

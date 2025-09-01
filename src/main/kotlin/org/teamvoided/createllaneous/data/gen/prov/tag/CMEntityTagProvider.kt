@@ -12,8 +12,6 @@ import org.teamvoided.createllaneous.data.tags.CMEntityTags
 
 class CMEntityTagProvider(o: PackOutput, l: Lookup) : EntityTypeTagsProvider(o, l, MODID, FH) {
     override fun addTags(provider: HolderLookup.Provider) {
-        tag(CMEntityTags.BREEZE_BURNER_CAPTURABLE).add(
-            EntityType.BREEZE
-        )
+        tag(CMEntityTags.BREEZE_BURNER_CAPTURABLE).add(EntityType.BREEZE)
     }
 }

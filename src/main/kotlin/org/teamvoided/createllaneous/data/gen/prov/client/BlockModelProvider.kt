@@ -17,15 +17,14 @@ import org.teamvoided.createllaneous.Createllaneous.MODID
 import org.teamvoided.createllaneous.Createllaneous.id
 import org.teamvoided.createllaneous.Createllaneous.mc
 import org.teamvoided.createllaneous.data.gen.FH
-import org.teamvoided.createllaneous.init.CMBlocks
+import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
 import org.teamvoided.createllaneous.utils.blockKey
 
 
 class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {
 
     override fun registerStatesAndModels() {
-
-        CMBlocks.DOOR_BLOCKS.forEach {
+        DOOR_BLOCKS.forEach {
             if (it.get() !is SlidingDoorBlock) throw Error("${it.registeredName} is not a sliding door or folding door")
             slidingDoorBlock(it.get(), doorSideParticleFromBlockName(it.get()))
         }

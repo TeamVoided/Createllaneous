@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister
 import org.teamvoided.createllaneous.Createllaneous
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlockEntity
 import org.teamvoided.createllaneous.content.large_bell.LargeBellBlockEntity
+import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
 
 object CMBlockEntityTypes {
     val BLOCK_ENTITY_TYPES: DeferredRegister<BlockEntityType<*>> =
@@ -23,12 +24,9 @@ object CMBlockEntityTypes {
     }
 
     fun addBlockEntities(event: BlockEntityTypeAddBlocksEvent) {
-        event.modify(AllBlockEntityTypes.SLIDING_DOOR.get(), *CMBlocks.DOOR_BLOCKS.map { it.get() }.toTypedArray())
+        event.modify(AllBlockEntityTypes.SLIDING_DOOR.get(), *DOOR_BLOCKS.map { it.get() }.toTypedArray())
     }
 
-    fun <T : BlockEntity> register(
-        name: String, be: () -> BlockEntityType<T>,
-    ): DeferredHolder<BlockEntityType<*>, BlockEntityType<T>> {
-        return BLOCK_ENTITY_TYPES.register(name, be)
-    }
+    fun <T : BlockEntity> register(name: String, be: () -> BlockEntityType<T>)
+            : DeferredHolder<BlockEntityType<*>, BlockEntityType<T>> = BLOCK_ENTITY_TYPES.register(name, be)
 }

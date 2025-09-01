@@ -16,7 +16,7 @@ import org.teamvoided.createllaneous.content.breather.BreezeBreatherRenderer
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherVisual
 import org.teamvoided.createllaneous.content.large_bell.LargeBellRenderer
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
-import org.teamvoided.createllaneous.init.CMBlocks
+import org.teamvoided.createllaneous.utils.registry.CUTOUT
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(value = Createllaneous.MODID, dist = [Dist.CLIENT])
@@ -27,11 +27,7 @@ object CreatellaneousClient {
     }
 
     private fun onClientSetup(event: FMLClientSetupEvent) {
-        listOf(
-            CMBlocks.BRASS_GRATE,
-            CMBlocks.EMPTY_BREEZE_BREATHER,
-            CMBlocks.BREEZE_BREATHER,
-        ).forEach { setLayer(it, RenderType.CUTOUT) }
+        CUTOUT.forEach { setLayer(it, RenderType.CUTOUT) }
 
         registerVisualizer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
 

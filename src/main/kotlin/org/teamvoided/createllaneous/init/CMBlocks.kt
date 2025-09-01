@@ -3,7 +3,9 @@ package org.teamvoided.createllaneous.init
 import com.simibubi.create.AllPartialModels
 import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour
+import com.simibubi.create.api.registry.SimpleRegistry
 import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction
+import com.simibubi.create.content.contraptions.behaviour.TrapdoorMovingInteraction
 import com.simibubi.create.content.decoration.TrainTrapdoorBlock
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorMovementBehaviour
@@ -15,6 +17,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties.ofFullCopy
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.material.PushReaction
 import net.neoforged.neoforge.registries.DeferredBlock
@@ -25,80 +28,76 @@ import org.teamvoided.createllaneous.content.breather.BreezeBreatherMovementBeha
 import org.teamvoided.createllaneous.content.breather.EmptyBreezeBreatherBlock
 import org.teamvoided.createllaneous.content.large_bell.LargeBellBlock
 import org.teamvoided.createllaneous.content.large_bell.LargeBellStructuralBlock
+import org.teamvoided.createllaneous.data.tags.CMBlockTags
+import org.teamvoided.createllaneous.init.misc.CMProperties
+import org.teamvoided.createllaneous.utils.registry.*
 
 object CMBlocks {
     val BLOCKS: DeferredRegister.Blocks = DeferredRegister.createBlocks(Createllaneous.MODID)
-    val DOOR_BLOCKS = mutableSetOf<DeferredBlock<out Block>>()
 
 
     val EMPTY_BREEZE_BREATHER = registerNoItem("empty_breeze_breather") {
-        EmptyBreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.softMetal()))
-    }
+        EmptyBreezeBreatherBlock(ofFullCopy(SharedProperties.softMetal()))
+    }.cutout().pickaxe()
     val BREEZE_BREATHER = registerNoItem("breeze_breather") {
-        BreezeBreatherBlock(BlockBehaviour.Properties.ofFullCopy(EMPTY_BREEZE_BREATHER.get()))
-    }
+        BreezeBreatherBlock(ofFullCopy(EMPTY_BREEZE_BREATHER.get()))
+    }.cutout().pickaxe()
     val LARGE_BELL = registerNoItem("large_bell") {
         LargeBellBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).forceSolidOn().requiresCorrectToolForDrops()
                 .strength(10f).sound(SoundType.ANVIL).pushReaction(PushReaction.BLOCK)
         )
-    }
+    }.pickaxe()
     val LARGE_BELL_STRUCTURAL = registerNoItem("large_bell_structural") {
-        LargeBellStructuralBlock(BlockBehaviour.Properties.ofFullCopy(LARGE_BELL.get()))
-    }
+        LargeBellStructuralBlock(ofFullCopy(LARGE_BELL.get()))
+    }.pickaxe()
 
-    val CUT_BRASS = register("cut_brass") {
-        Block(
-            BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
-                .mapColor(MapColor.TERRACOTTA_YELLOW)
-                .requiresCorrectToolForDrops()
-        )
-    }
+    // region Brass
+    val CUT_BRASS = register("cut_brass") { Block(CMProperties.BRASS) }.pickaxe().ironTool()
     val CUT_BRASS_STAIRS = register("cut_brass_stairs") {
-        StairBlock(CUT_BRASS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(CUT_BRASS.get()))
-    }
-    val CUT_BRASS_SLAB = register("cut_brass_slab") {
-        SlabBlock(BlockBehaviour.Properties.ofFullCopy(CUT_BRASS.get()))
-    }
-
+        StairBlock(CUT_BRASS.get().defaultBlockState(), CMProperties.BRASS)
+    }.pickaxe().ironTool().stair()
+    val CUT_BRASS_SLAB = register("cut_brass_slab") { SlabBlock(CMProperties.BRASS) }.pickaxe().ironTool().slab()
     val BRASS_GRATE = register("brass_grate") {
-        WaterloggedTransparentBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))
-    }
+        WaterloggedTransparentBlock(ofFullCopy(Blocks.COPPER_GRATE).mapColor(MapColor.TERRACOTTA_YELLOW))
+    }.cutout().pickaxe().ironTool()
+    // endregion
+
+    // region Trapdoors
     val BRASS_TRAPDOOR = register("brass_trapdoor") {
-        TrainTrapdoorBlock(BlockBehaviour.Properties.ofFullCopy(CUT_BRASS.get()).sound(SoundType.NETHERITE_BLOCK))
-        //TrapDoorBlock(SlidingDoorBlock.TRAIN_SET_TYPE.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_GRATE))
-    }
+        TrainTrapdoorBlock(CMProperties.BRASS.sound(SoundType.NETHERITE_BLOCK))
+    }.mineable().trapdoor()
     val ANDESITE_TRAPDOOR = register("andesite_trapdoor") {
-        TrainTrapdoorBlock(
-            BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
-                .requiresCorrectToolForDrops()
-        )
-    }
+        TrainTrapdoorBlock(ofFullCopy(Blocks.STONE).requiresCorrectToolForDrops())
+    }.mineable().trapdoor()
+    val COPPER_CASING_TRAPDOOR = register("copper_casing_trapdoor") {
+        TrainTrapdoorBlock(ofFullCopy(BRASS_TRAPDOOR.get()).mapColor(MapColor.COLOR_ORANGE))
+    }.mineable().trapdoor()
+    // endregion
+
+    // region Doors
     val ANDESITE_SLIDING_DOOR = register("andesite_sliding_door") {
         SlidingDoorBlock.metal(
-            BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_DOOR)
+            ofFullCopy(Blocks.IRON_DOOR)
                 .mapColor(MapColor.STONE)
                 .requiresCorrectToolForDrops()
                 .strength(3.0F, 6.0F),
             false
         )
-    }.doorBlock()
-    val COPPER_CASING_TRAPDOOR = register("copper_casing_trapdoor") {
-        TrainTrapdoorBlock(
-            BlockBehaviour.Properties.ofFullCopy(BRASS_TRAPDOOR.get())
-                .mapColor(Blocks.COPPER_TRAPDOOR.defaultMapColor())
-        )
-    }
+    }.door().mineable()
+
     val COPPER_CASING_SLIDING_DOOR = register("copper_casing_sliding_door") {
         SlidingDoorBlock.metal(
-            BlockBehaviour.Properties.ofFullCopy(ANDESITE_SLIDING_DOOR.get())
+            ofFullCopy(ANDESITE_SLIDING_DOOR.get())
                 .mapColor(Blocks.COPPER_DOOR.defaultMapColor()),
             false
         )
-    }.doorBlock()
+    }.door().mineable()
     val COPPER_CASING_FOLDING_DOOR = register("copper_casing_folding_door") {
-        SlidingDoorBlock.metal(BlockBehaviour.Properties.ofFullCopy(COPPER_CASING_SLIDING_DOOR.get()), true)
-    }.doorBlock()
+        SlidingDoorBlock.metal(ofFullCopy(COPPER_CASING_SLIDING_DOOR.get()), true)
+    }.door().mineable()
+    // endregion
+
 
     fun init() {
         MovementBehaviour.REGISTRY.register(BREEZE_BREATHER.get(), BreezeBreatherMovementBehavior())
@@ -106,10 +105,12 @@ object CMBlocks {
             BREEZE_BREATHER.get(),
             BreezeBreatherBlock.BreezeBreatherConductor()
         )
+       /* MovingInteractionBehaviour.REGISTRY.registerProvider(
+            SimpleRegistry.Provider.forBlockTag(CMBlockTags.INTERACTABLE_TRAPDOORS, TrapdoorMovingInteraction())
+        )*/
 
         DOOR_BLOCKS.forEach {
             val block = it.get()
-            if (block !is SlidingDoorBlock) throw Error("${it.registeredName} is not a sliding door or folding door")
 
             MovingInteractionBehaviour.REGISTRY.register(block, DoorMovingInteraction())
             MovementBehaviour.REGISTRY.register(block, SlidingDoorMovementBehaviour())
@@ -135,8 +136,4 @@ object CMBlocks {
         return BLOCKS.register(name, blockSupplier)
     }
 
-    fun <T : Block> DeferredBlock<T>.doorBlock(): DeferredBlock<T> {
-        DOOR_BLOCKS.add(this)
-        return this
-    }
 }
