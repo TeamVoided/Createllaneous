@@ -58,7 +58,7 @@ object CMBlocks {
     val ANDESITE_TRAPDOOR = register("andesite_trapdoor") {
         TrainTrapdoorBlock(ofFullCopy(Blocks.STONE).requiresCorrectToolForDrops())
     }.mineable().trapdoor()
-    val COPPER_CASING_TRAPDOOR = register("copper_casing_trapdoor") {
+    val COPPER_TRAPDOOR = register("copper_trapdoor") {
         TrainTrapdoorBlock(ofFullCopy(BRASS_TRAPDOOR.get()).mapColor(MapColor.COLOR_ORANGE))
     }.mineable().trapdoor()
     // endregion
@@ -74,15 +74,15 @@ object CMBlocks {
         )
     }.door().mineable()
 
-    val COPPER_CASING_SLIDING_DOOR = register("copper_casing_sliding_door") {
+    val COPPER_SLIDING_DOOR = register("copper_sliding_door") {
         SlidingDoorBlock.metal(
             ofFullCopy(ANDESITE_SLIDING_DOOR.get())
                 .mapColor(Blocks.COPPER_DOOR.defaultMapColor()),
             false
         )
     }.door().mineable()
-    val COPPER_CASING_FOLDING_DOOR = register("copper_casing_folding_door") {
-        SlidingDoorBlock.metal(ofFullCopy(COPPER_CASING_SLIDING_DOOR.get()), true)
+    val COPPER_FOLDING_DOOR = register("copper_folding_door") {
+        SlidingDoorBlock.metal(ofFullCopy(COPPER_SLIDING_DOOR.get()), true)
     }.door().mineable()
     // endregion
 

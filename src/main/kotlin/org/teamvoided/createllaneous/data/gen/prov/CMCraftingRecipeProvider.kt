@@ -47,7 +47,7 @@ class CMCraftingRecipeProvider(o: PackOutput, l: Lookup) : RecipeProvider(o, l) 
 
         recipeOutput.simpleCasingTrapdoor(AllBlocks.BRASS_CASING.asItem(),CMBlocks.BRASS_TRAPDOOR.asItem())
         recipeOutput.simpleCasingTrapdoor(AllBlocks.ANDESITE_CASING.asItem(),CMBlocks.ANDESITE_TRAPDOOR.asItem())
-        recipeOutput.simpleCasingTrapdoor(AllBlocks.COPPER_CASING.asItem(),CMBlocks.COPPER_CASING_TRAPDOOR.asItem())
+        recipeOutput.simpleCasingTrapdoor(AllBlocks.COPPER_CASING.asItem(),CMBlocks.COPPER_TRAPDOOR.asItem())
 
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, CMBlocks.EMPTY_BREEZE_BREATHER.asItem(), 1)

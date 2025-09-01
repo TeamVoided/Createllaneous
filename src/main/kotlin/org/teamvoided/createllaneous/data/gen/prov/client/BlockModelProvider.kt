@@ -35,7 +35,7 @@ class BlockModelProvider(o: PackOutput) : BlockStateProvider(o, MODID, FH) {
         val side = when (str.first().toString()) {
             "a" -> doorSide(AllBlocks.ANDESITE_DOOR.get()) to block(AllBlocks.ANDESITE_CASING.get()).toString()
             "b" -> doorSide(AllBlocks.BRASS_DOOR.get()) to block(AllBlocks.BRASS_CASING.get()).toString()
-            "c" -> id("block/copper_casing_door_side").toString() to block(AllBlocks.COPPER_CASING.get()).toString()
+            "c" -> id("block/copper_door_side").toString() to block(AllBlocks.COPPER_CASING.get()).toString()
             "t" -> doorSide(AllBlocks.TRAIN_DOOR.get()) to block(AllBlocks.RAILWAY_CASING.get()).toString()
             else -> str to str
         }
