@@ -1,16 +1,13 @@
 package org.teamvoided.createllaneous.init
 
-import com.simibubi.create.AllBlockEntityTypes
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import org.teamvoided.createllaneous.Createllaneous
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherBlockEntity
 import org.teamvoided.createllaneous.content.large_bell.LargeBellBlockEntity
-import org.teamvoided.createllaneous.utils.registry.DOOR_BLOCKS
 
 object CMBlockEntityTypes {
     val BLOCK_ENTITY_TYPES: DeferredRegister<BlockEntityType<*>> =
@@ -21,10 +18,6 @@ object CMBlockEntityTypes {
     }
     val LARGE_BELL_BLOCK_ENTITY = register("large_bell_block_entity") {
         BlockEntityType(::LargeBellBlockEntity, setOf(CMBlocks.LARGE_BELL.get()), null)
-    }
-
-    fun addBlockEntities(event: BlockEntityTypeAddBlocksEvent) {
-        event.modify(AllBlockEntityTypes.SLIDING_DOOR.get(), *DOOR_BLOCKS.map { it.get() }.toTypedArray())
     }
 
     fun <T : BlockEntity> register(name: String, be: () -> BlockEntityType<T>)

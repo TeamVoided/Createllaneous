@@ -22,7 +22,7 @@ typealias Lookup = CompletableFuture<HolderLookup.Provider>
 
 var FH: ExistingFileHelper? = null
 
-fun gatherData(event: GatherDataEvent) {
+fun datagen(event: GatherDataEvent) {
     FH = turnOffFileHelper(event.existingFileHelper)
     // Assets
     event.createProvider(::ENLangProvider)

@@ -3,13 +3,10 @@ package org.teamvoided.createllaneous
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
-import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent
-import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.teamvoided.createllaneous.data.gen.gatherData
+import org.teamvoided.createllaneous.data.gen.datagen
 import org.teamvoided.createllaneous.init.*
-import org.teamvoided.createllaneous.utils.registerCapabilities
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(Createllaneous.MODID)
@@ -25,18 +22,13 @@ object Createllaneous {
         CMItemAttributeType.ITEM_ATTRIBUTE_TYPES.register(MOD_BUS)
 
         MOD_BUS.addListener(::onCommonSetup)
-        MOD_BUS.addListener(::onServerSetup)
-        MOD_BUS.addListener(::gatherData)
-        MOD_BUS.addListener(CMBlockEntityTypes::addBlockEntities)
-        MOD_BUS.addListener(::registerCapabilities)
-    }
+        CMEvents.init()
 
-    private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
-        LOGGER.log(Level.INFO, "Server starting...")
+        // Datagen
+        MOD_BUS.addListener(::datagen)
     }
 
     fun onCommonSetup(event: FMLCommonSetupEvent) {
-        LOGGER.log(Level.INFO, "Hello! This is working!")
         CMBlocks.init()
         CMBehaviours.init()
     }

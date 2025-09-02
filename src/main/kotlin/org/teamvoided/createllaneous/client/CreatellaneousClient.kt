@@ -31,7 +31,6 @@ object CreatellaneousClient {
 
         registerVisualizer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
 
-
         CMPartialModels.init()
     }
 
