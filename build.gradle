@@ -136,7 +136,8 @@ dependencies {
     implementation "maven.modrinth:jade:${jade_version}"
 
 
-    implementation("maven.modrinth:xaeros-world-map:1.38.8_NeoForge_1.21")
+    implementation("maven.modrinth:xaeros-world-map:1.39.12_NeoForge_1.21")
+    implementation("maven.modrinth:xaeros-minimap:25.2.10_NeoForge_1.21")
 
 
     implementation("plus.dragons.createdragonsplus:create-dragons-plus-${minecraft_version}:${create_dragons_plus_version}")
