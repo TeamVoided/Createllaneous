@@ -2,6 +2,7 @@ package org.teamvoided.createllaneous.compat
 
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.items.IItemHandler
@@ -11,7 +12,16 @@ import plus.dragons.createenchantmentindustry.common.registry.CEIBlockEntities.B
 
 object EnchantmentIndustry {
     fun register(event: RegisterCapabilitiesEvent) {
-        event.registerBlockEntity(ItemHandler.BLOCK, BLAZE_FORGER.get()) { forger, side ->
+        event.registerBlockEntity(ItemHandler.BLOCK, BLAZE_FORGER.get()) { forger, side: Direction? ->
+            val facing = forger.blockState.getValue(HorizontalDirectionalBlock.FACING)
+            val side = when (facing) {
+                Direction.NORTH -> side
+                Direction.SOUTH -> side?.opposite
+                Direction.WEST -> side?.clockWise
+                Direction.EAST -> side?.counterClockWise
+                else -> null
+            }
+
             when (side) {
                 Direction.EAST -> BlazeForgerItemHandler(forger, 0)
                 Direction.WEST -> BlazeForgerItemHandler(forger, 1)

@@ -16,8 +16,9 @@ object CMEvents {
 
     // region Register
     fun registerCapabilities(event: RegisterCapabilitiesEvent) {
-        if (CMMods.CREATE_ENCHANTMENT_INDUSTRY.isLoaded)
+        if (CMMods.CREATE_ENCHANTMENT_INDUSTRY.isLoaded) {
             EnchantmentIndustry.register(event)
+        }
     }
     // endregion
 
