@@ -15,7 +15,7 @@ import static org.teamvoided.createllaneous.Createllaneous.config;
 @Mixin(TrainMapManager.class)
 public class TrainMapManagerMixin {
     @Inject(method = "redrawAll", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/ObjectArrayList;<init>()V"))
-    private static void xaerosMapTick(CallbackInfo ci, @Local(ordinal = 0) LocalIntRef mainColor, @Local(ordinal = 1) LocalIntRef darkerColor, @Local(ordinal = 2) LocalIntRef darkerColorShadow) {
+    private static void xaerosMapTick(CallbackInfo ci, @Local(name = "mainColor") LocalIntRef mainColor, @Local(name = "darkerColor") LocalIntRef darkerColor, @Local(name = "darkerColorShadow") LocalIntRef darkerColorShadow) {
         if (config.enableCustomTrainMapColors) {
             mainColor.set(config.mainColor.getRGB());
             darkerColor.set(config.darkerColor.getRGB());
