@@ -2,18 +2,25 @@ package org.teamvoided.createllaneous.utils
 
 import java.awt.Color
 
-const val enableColorOverride = false
+class CMConfig {
+    // -- Client --
+    // train map
+    @JvmField
+    var enableCustomTrainMapColors = false
 
-@JvmField
-val MAIN_COLOR = Color.GREEN
+    @JvmField
+    val mainColor: Color = Color.GREEN
 
-@JvmField
-val DARKER_COLOR = Color.ORANGE
+    @JvmField
+    val darkerColor: Color = Color.ORANGE
 
-@JvmField
-val DARKER_COLOR_SHADOW = Color.GRAY
+    @JvmField
+    val darkerColorShadow: Color = Color.GRAY
 
+    // R_G_B_A
+    @JvmField
+    var outlineColor = 0xFF_00_00_00.toInt()
 
-// R_G_B_A
-@JvmField
-var OUTLINE_COLOR = 0xFF_00_00_00.toInt()
+    // compat
+    var enableXaerosIntegration = true
+}
