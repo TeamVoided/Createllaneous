@@ -1,5 +1,7 @@
 package org.teamvoided.createllaneous.client
 
+import com.simibubi.create.Create
+import com.simibubi.create.content.trains.entity.CarriageContraptionEntity
 import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.RenderType
@@ -12,11 +14,15 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.neoforge.client.event.EntityRenderersEvent
 import net.neoforged.neoforge.registries.DeferredBlock
 import org.teamvoided.createllaneous.Createllaneous
+import org.teamvoided.createllaneous.Createllaneous.config
+import org.teamvoided.createllaneous.Createllaneous.id
+import org.teamvoided.createllaneous.compat.CMMods
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherRenderer
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherVisual
 import org.teamvoided.createllaneous.content.large_bell.LargeBellRenderer
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
 import org.teamvoided.createllaneous.utils.registry.CUTOUT
+import org.teamvoided.xaero_api.api.CustomMapNameRegistry
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(value = Createllaneous.MODID, dist = [Dist.CLIENT])
@@ -32,6 +38,15 @@ object CreatellaneousClient {
         registerVisualizer(CMBlockEntityTypes.BREEZE_BREATHER_BLOCK_ENTITY.get(), ::BreezeBreatherVisual)
 
         CMPartialModels.init()
+
+        if (config.enableXaerosIntegration && CMMods.XAEROS_WORLD_MAP.isLoaded) {
+            CustomMapNameRegistry.registerMapNameProvider(id("trains")) { original, trainEntity ->
+                if (config.enableXaerosIntegration && trainEntity is CarriageContraptionEntity) {
+                    val train = Create.RAILWAYS.sided(trainEntity.level()).trains[trainEntity.trainId]!!
+                    if (trainEntity.carriageIndex == 0) train.name else null
+                } else original
+            }
+        }
     }
 
     private fun registerRender(event: EntityRenderersEvent.RegisterRenderers) {
@@ -41,12 +56,9 @@ object CreatellaneousClient {
 
     fun <T : BlockEntity> registerVisualizer(
         type: BlockEntityType<T>, factory: SimpleBlockEntityVisualizer.Factory<T>,
-    ): SimpleBlockEntityVisualizer<T> {
-        return SimpleBlockEntityVisualizer.builder<T>(type)
-            .factory(factory)
-            .skipVanillaRender { true }
-            .apply()
-    }
+    ): SimpleBlockEntityVisualizer<T> =
+        SimpleBlockEntityVisualizer.builder<T>(type).factory(factory).skipVanillaRender { true }.apply()
+
 
     @Suppress("DEPRECATION")
     fun <T : Block> setLayer(block: DeferredBlock<T>, type: RenderType) =

@@ -8,7 +8,7 @@
     "backport.TrainMapEventsMixin",
     "backport.TrainMapManagerMixin",
     "compat.BlazeForgerBlockEntityAccessor",
-    "compat.XaeroMiscMixin",
+    "extract.XaeroMiscMixin",
     "skb.StockTickerBlockEntityMixin"
   ],
   "client": [
