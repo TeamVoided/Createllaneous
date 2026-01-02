@@ -21,7 +21,6 @@ import org.teamvoided.createllaneous.content.breather.BreezeBreatherRenderer
 import org.teamvoided.createllaneous.content.breather.BreezeBreatherVisual
 import org.teamvoided.createllaneous.content.large_bell.LargeBellRenderer
 import org.teamvoided.createllaneous.init.CMBlockEntityTypes
-import org.teamvoided.createllaneous.client.CMClientConfig
 import org.teamvoided.createllaneous.utils.registry.CUTOUT
 import org.teamvoided.xaero_api.api.CustomMapNameRegistry
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
