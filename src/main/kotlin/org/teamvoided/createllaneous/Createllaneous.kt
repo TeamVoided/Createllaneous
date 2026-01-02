@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.teamvoided.createllaneous.data.gen.datagen
 import org.teamvoided.createllaneous.init.*
-import org.teamvoided.createllaneous.utils.CMConfig
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(Createllaneous.MODID)
@@ -17,8 +16,8 @@ object Createllaneous {
     @JvmField
     val LOGGER: Logger = LogManager.getLogger(MODID)
 
-    @JvmField
-    val config = CMConfig()
+//    @JvmField
+//    val config = CMConfig()
 
     init {
         CMBlocks.BLOCKS.register(MOD_BUS)

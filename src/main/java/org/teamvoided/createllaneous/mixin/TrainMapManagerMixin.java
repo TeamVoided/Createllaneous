@@ -10,21 +10,21 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static org.teamvoided.createllaneous.Createllaneous.config;
+import static org.teamvoided.createllaneous.client.CreatellaneousClient.clientConfig;
 
 @Mixin(TrainMapManager.class)
 public class TrainMapManagerMixin {
     @Inject(method = "redrawAll", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/ObjectArrayList;<init>()V"))
     private static void xaerosMapTick(CallbackInfo ci, @Local(name = "mainColor") LocalIntRef mainColor, @Local(name = "darkerColor") LocalIntRef darkerColor, @Local(name = "darkerColorShadow") LocalIntRef darkerColorShadow) {
-        if (config.enableCustomTrainMapColors) {
-            mainColor.set(config.mainColor.getRGB());
-            darkerColor.set(config.darkerColor.getRGB());
-            darkerColorShadow.set(config.darkerColorShadow.getRGB());
+        if (clientConfig.enableCustomTrainMapColors) {
+            mainColor.set(clientConfig.mainColor.toInt());
+            darkerColor.set(clientConfig.darkerColor.toInt());
+            darkerColorShadow.set(clientConfig.darkerColorShadow.toInt());
         }
     }
 
     @ModifyConstant(method = "renderPhase", constant = @Constant(intValue = 0xFF_000000))
     private static int xaerosMapTick(int bgColor) {
-        return (config.enableCustomTrainMapColors) ? config.outlineColor : bgColor;
+        return (clientConfig.enableCustomTrainMapColors) ? clientConfig.outlineColor.toInt() : bgColor;
     }
 }
