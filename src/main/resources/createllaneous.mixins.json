@@ -5,17 +5,11 @@
   "mixins": [
     "BaseSpawnerAccessor",
     "TrainMapManagerMixin",
-    "backport.TrainMapEventsMixin",
-    "backport.TrainMapManagerMixin",
     "compat.BlazeForgerBlockEntityAccessor",
     "extract.XaeroMiscMixin",
     "skb.StockTickerBlockEntityMixin"
   ],
   "client": [
-    "backport.StationScreenMixin",
-    "backport.xearo.XaeroFullscreenMapAccessor",
-    "backport.xearo.XaeroFullscreenMapMixin",
-    "backport.xearo.XaeroPauseScreenOverrideMixin",
     "skb.StockKeeperRequestScreenMixin"
   ],
   "injectors": {

@@ -128,7 +128,7 @@ dependencies {
     implementation 'thedarkcolour:kotlinforforge-neoforge:5.5.0'
 
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
@@ -143,8 +143,8 @@ dependencies {
     implementation "maven.modrinth:jade:${jade_version}"
 
 
-    implementation("maven.modrinth:xaeros-world-map:1.39.12_NeoForge_1.21")
-    implementation("maven.modrinth:xaeros-minimap:25.2.10_NeoForge_1.21")
+    implementation("maven.modrinth:xaeros-world-map:1.40.2_NeoForge_1.21")
+    implementation("maven.modrinth:xaeros-minimap:25.3.2_NeoForge_1.21")
 
 
     implementation("plus.dragons.createdragonsplus:create-dragons-plus-${minecraft_version}:${create_dragons_plus_version}")
