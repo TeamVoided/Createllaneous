@@ -53,25 +53,31 @@ object CMBlocks {
 
     // region Trapdoors
     val BRASS_TRAPDOOR = register("brass_trapdoor") {
-        TrainTrapdoorBlock(CMProperties.BRASS.sound(SoundType.NETHERITE_BLOCK))
+        TrainTrapdoorBlock.metal(CMProperties.BRASS.sound(SoundType.NETHERITE_BLOCK))
     }.mineable().trapdoor()
     val ANDESITE_TRAPDOOR = register("andesite_trapdoor") {
-        TrainTrapdoorBlock(ofFullCopy(Blocks.STONE).requiresCorrectToolForDrops())
+        TrainTrapdoorBlock.metal(ofFullCopy(Blocks.STONE).requiresCorrectToolForDrops())
     }.mineable().trapdoor()
     val COPPER_TRAPDOOR = register("copper_trapdoor") {
-        TrainTrapdoorBlock(ofFullCopy(BRASS_TRAPDOOR.get()).mapColor(MapColor.COLOR_ORANGE))
+        TrainTrapdoorBlock.metal(ofFullCopy(BRASS_TRAPDOOR.get()).mapColor(MapColor.COLOR_ORANGE))
     }.mineable().trapdoor()
     // endregion
 
     // region Doors
-    val ANDESITE_SLIDING_DOOR = register("andesite_sliding_door") {
+    val BRASS_FOLDING_DOOR = register("brass_folding_door") {
         SlidingDoorBlock.metal(
             ofFullCopy(Blocks.IRON_DOOR)
-                .mapColor(MapColor.STONE)
+                .mapColor(MapColor.GOLD)
                 .requiresCorrectToolForDrops()
-                .strength(3.0F, 6.0F),
-            false
+                .strength(3.0F, 6.0F), true
         )
+    }.door().mineable()
+    val TRAIN_FOLDING_DOOR = register("train_folding_door") {
+        SlidingDoorBlock.metal(ofFullCopy(BRASS_FOLDING_DOOR.get()), true)
+    }.door().mineable()
+
+    val ANDESITE_SLIDING_DOOR = register("andesite_sliding_door") {
+        SlidingDoorBlock.metal(ofFullCopy(BRASS_FOLDING_DOOR.get()).mapColor(MapColor.STONE), false)
     }.door().mineable()
 
     val COPPER_SLIDING_DOOR = register("copper_sliding_door") {
